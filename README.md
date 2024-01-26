@@ -1,2 +1,2 @@
 # SFM.tools
-Tools and guides for implementing Sentral Forskivningsfmodul
+Tools, guides and examples for implementing Sentral Forskivningsfmodul
