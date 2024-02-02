@@ -1,0 +1,997 @@
+﻿<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h1>Doctor Who - brukerveiledning</h1>
+    <h2>Innhold</h2>
+    <h4><a href="#oppsett">Installasjon og oppsett</a></h4>
+    <h4><a href="#meldinger">Innsendelse av meldinger</a></h4>
+    <h4><a href="#apotek">Apotek</a></h4>
+    <h4><a href="#mdapotek">Multidose-apotek</a></h4>
+    <h4><a href="#hn">Helsenorge</a></h4>
+    <h4><a href="#kombi">Kombinasjonsinnsending</a></h4>
+    <h4><a href="#sfm">SFM</a></h4>
+    <h4><a href="#auto">Autotesting</a></h4>
+    <h2><a id="oppsett">Installasjon og oppsett</a></h2>
+    <h3>Installasjon</h3>
+    <p>
+        Installering av Dr Who gjøres ved å kjøre fila 'DoctorWho.application'. Ved senere oppgraderinger må denne fila ligge på samme sted. <br />
+        For interne brukere som benytter skylab anbefales det å installere direkte fra SkyNAS (Dr Who ligger under testprogrammer\DoctorWho). <br />
+        For de som har mottatt Dr Who på fil, anbefales det å pakke denne ut til en folder du husker, slik at du senere kan legge nye versjoner dit for oppgradering.
+    </p>
+    <h3>Oppsett av Dr Who</h3>
+    <p>
+        Det første du bør gjøre etter å ha installert, er å gå til innstillingene, og sette opp Dr Who slik du ønsker. Under menyen Innstillinger har du tre <br />
+        vinduer: Generelt, Sikkerhet (Sertifikater etc), og Default (oppsett av defaultfiler). Her følger en veiledning av noen av innstillingene: <br />
+
+        <h4>Generelt</h4>
+
+        <b>Datakatalog:</b><br />
+        Her anbefales det å velge 'Bruk valgfri folder', og gjerne default folder angitt. Etter å ha gjort det, anbefales det for førstegangsoppsett å klikke på<br />
+        'Kopier basefiler', og deretter kopiere alle filer over. Denne operasjonen vil kopiere de ulike xml-filene som danner grunnlaget for meldingene,<br />
+        over til den nye folderstrukturen.<br /><br />
+
+        <b>Testmiljø:</b><br />
+        Her kan du velge hvilket testmiljø de ulike tjenestene skal gå mot. Legg merke til at de fleste har en internett- og en NHN-versjon. Selve URL-en som ligger <br />
+        bak navnet, kan finnes ved å inspisere fila 'DoctorWho.exe.config' som ligger i programfolderen. Denne kan åpnes med knappen 'Konfigurasjon'.<br /><br />
+
+        <b>Annet:</b><br />
+        Aktiver systemlog for ekstra logging av enkelte operasjoner. Disse havner i fila systemlog.txt, i log-katalogen.<br />
+        Opsjonen 'Behandle 2.4 meldinger' kan settes dersom meldinger av Eresept 2.4 versjon skal behandles/parses.
+
+        <h4>Sikkerhet</h4>
+
+        <b>Sertifikater:</b><br />
+        Her kan man velge sertifikater. Alle må ikke nødvendigvis velges, det kommer an på hva du skal bruke Dr Who til. NB! De må installeres i lokal certstore<br />
+        før de kan velges, se kapittel 'Installasjon av sertifikat' under.<br /><br />
+
+        Det finnes noen opsjoner knyttet til sertifikater som er nyttig til negativ testing: <br />
+        Opsjonen 'Slå av validering av servicesertifikatet (RF-sertifikatet)' vil slå av lokal (klientside) validering av dette sertifikatet, noe som gjør det mulig å sende feil/ugyldig sertifikat til Reseptformidleren.<br />
+        Programmet filtrerer som default bort sertifikater av feil type, men det er mulig å bruke opsjonen 'Inkluder alle typer sertifikater...' for å også inkludere feil type.<br />
+        Opsjonen 'Inkludér ugyldige sertifikater ved valg av sertifikat for personlig signering' vil gjøre at ugyldige sertifikater vil dukke opp i sertifikatlista når du skal lage en personlig signatur.<br />
+
+    </p>
+    <h3>Installasjon av sertifikat</h3>
+    <p>
+        For å kunne velge et sertifikat i Innstillinger, må sertifikatet ligge i sertifikatlageret (certstore) på maskinen du har installert toolen.<br />
+        Denne veiledningen beskriver hvordan du legger inn sertifikat her.<br />
+        <h4>Oversikt over sertifikatene</h4>
+        Sertifikatene skal enten legges i 'Local machine' (Lokal datamaskin) eller i 'Current User' (gjeldende bruker). <br />
+        Følgende oversikt viser sertifikatene, hvilken type du trenger, og hvor de skal ligge. Tabellen viser til sist hva sertifikatet typisk heter,<br />
+        det kan være til hjelp for å finne riktig sertifikat.
+        <pre>
+        <code>
+                RF              Virksomhetssertifikat for Reseptformidleren      Encryption         Local machine    'Reseptformidleren'
+                Legekontor      Virkshomhetssertifikat for legekontor            Encryption         Local machine    'Navn på legekontor'
+                Utleverer       Virkshomhetssertifikat for utleverer             Encryption         Local machine    'Navn på utleverer'
+                Nettapotek      Virkshomhetssertifikat for nettapotek            Encryption         Local machine    'Navn på nettapotek'
+                Token           Sertifikat som brukes til signering av token     Non-repudiation    Local machine    'Token E-resept'
+                HN (SLL)        Sertifikat for SSL-kommunikasjon (Helsenorge)    Digital Signature  Local machine    'Token E-resept'
+                HN (Personvern) Sertifikat for signering av blokkeringsmeldinger Non-repudiation    Current User     'Token E-resept'
+                SFM             Virksomhetssertifikat for SFM                    Non-repudiation    Current User     'SFM'
+            </code>
+        </pre>
+        <h4>Installasjonsveiledning</h4>
+        <pre>
+            <code>
+                1. Åpne mmc (link på desktop: 'CertificatesLocalMachineCurrentUser' eller startmenu: skriv 'mmc'. Ved bruk av link på desktop er steg 2-3 under unødvendig).
+                2. Velg File - Add/Remove snap-in.
+                3. I liste for tilgjengelige snap-in moduler: Velg Certificates og klikk på 'Add'.
+                4. Velg riktig sted for sertifikatet:
+                * Dersom du skal legge til i Local Machine (Lokal datamaskin), velg nederste valg 'Local machine account / Datamaskinkonto'.
+                * Dersom du skal legge til i Current User (gjeldende bruker), velg øverste valg 'My user account / Min brukerkonto'.
+                5. I hovedvinduet for mmc: manøvrer deg fram til: Certificates - Personal - Certificates.
+                6. Høyreklikk på 'Certificates' - velg 'All Tasks' - 'Import'.
+                7. Velg sertifikat:
+                7a. Klikk på 'Next' og Browse/Bla igjennom til riktig sertifikat. Nederst til høyre, velg 'Alle filer *.*', slik at alle filtyper vises.
+                Sertifikater ligger på 'Skynas' - 'Testsertifikater'. Det kan være at du ikke har tilgang til skynas fra dette browser-vinduet,
+                i så fall må du åpne et vanlig filutforsker-vindu og kopiere sertikatfilene fra skynas over til lokal disk.
+                7b. Ved installasjon av sertifikat med private nøkler trenger du et passord. Dette finner du i en tekstfil som skal ligge vedlagt sertifikatfilene.
+                Tips: Fra browse-vinduet - høyreklikk på tekstfila, og velg 'Edit'. Da får du opp fila i notepad. Kopier ut passordet.
+                7c. Velg riktig sertifikat. Mange sertifikat har to versjoner: Encryption (Digital signatur, Nøkkelchiffrering) eller Non-repudiation (Ikke-avvisning).
+                Se oversikt over for hvilken du skal velge. Tips: Typisk er det øverste sertifikatet i lista encryptionsertifikatet.
+                8. Klikk 'Next' og lim inn passord i neste vindu. Klikk så neste / fullfør til du er ferdig. Nå skal sertifikatet være lagt inn.
+                9.Nå kan du velge sertifikatet i Innstillinger. NB! Hvis du hadde vinduet for Innstillingene åpent før installasjon,
+                må du lukke og åpne vinduet på nytt. Dersom du oppdaterte et sertifikat (slettet og la inn på nytt) må du også åpne Innstillingene og lagre på nytt.
+            </code>
+        </pre>
+        <h4>Sette rettigheter til private nøkler</h4>
+        Dersom du opplever problemer med rettigheter til de private nøklene (keyset does not exist / nøkkelsett finnes ikke), må du gi rettigheter til brukeren som kjører toolen.<br />
+        Følgende to oppskrifter finnes, men vanligvis har man problemer med kun ett sertifikat, og da anbefales det å benytte den første metoden, 'Manuell metode'.<br />
+        <pre>
+            <code>
+                Manuell metode:
+
+                1. Åpne mmc: link på desktop : 'CertificatesLocalMachineCurrentUser'.
+                2. Velg Local Machine (Lokal datamaskin). Virksomhetssertifikater ligger alltid her.
+                3. Manøvrer deg fram til: Certificates - Personal - Certificates, og finn sertifikatet du har problemer med (for legekontor eller apotek).
+                Dersom det finnes flere versjoner er det 'Digital Signature, Key Encipherment' versjonen som brukes av Dr Who (dobbelklikk for å se properties).
+                4. Høyreklikk på sertifikatet du har problemer med - velg 'All Tasks - Manage Private Keys'.
+                5. Klikk på 'Add', og legg inn din bruker (typisk 'Testlab'). Klikk på 'Check Names', og den skal finne brukeren. Klikk Ok.
+                6. Sjekk at 'Full Control' er gitt til din bruker, og klikk Ok. Denne brukeren har nå rettigheter til dette sertifikatet.
+
+                Automatisk metode (vil kunne sette rettigheter for alle installerte sertifikater):
+
+                1. Kjør Doctor Who med Administrator-rettigheter (Høyreklikk - Run as Administrator). Hvis det ikke fungerer direkte fra taskbar/menyen kan du gjøre følgende:
+                Start Doctor Who på vanlig måte -> dobbeltklikk i et åpent område i vinduet slik at installasjonsfolderen kommer opp -> høyreklikk på DoctorWho.exe - velg Run as Administrator.
+                2. Velg meny 'Innstillinger', og kontroller/sett sertifikatene som skal benytte private nøkler. (Alle som ligger i Local machine, unntatt RF-sertifikatet)
+                3. Velg meny 'Sikkerhet', og klikk på 'Gi aksess'.
+                4. Nå skal rettighetene være satt. Du kan nå avslutte, og starte Doctor Who på vanlig måte. <br />
+            </code>
+      </pre>
+       
+
+    <h2><a id="meldinger">Innsendelse av meldinger</a></h2>
+    <p>
+        <h3>Grunnfunksjonalitet</h3>
+        Dr Who hovedfunksjonalitet er å sende inn xml-meldinger til RF's webtjenester. Som utgangspunkt benyttes hovedsaklig xml-filer <br />
+        som ligger på disk (såkalte basefiler eller malfiler). Disse filene kan kopieres over til din valgte datakatalog som beskrevet i kapittel 'Oppsett av Dr Who'.<br />
+        De ulike typer filer ligger i forskjellige foldere. Den viktigste folderen heter xml, og inneholder selve meldingen. De andre folderene: 'Rekvirent', 'Pasient', <br />
+        'Resept', 'Sender' og 'Utlevering' inneholder subkomponeneter som, hvis valgt, vil bytte ut komponenter i meldingen før den blir sendt.<br /><br />
+
+        Det anbefales å bygge ut dette biblioteket av filer, f.eks bør man i 'Sender' katalogen lage sin egen fil som representerer senderen av meldingen fra din installasjon, <br />
+        typisk da ditt testlegekontor, eller apoteket du har tenkt å bruke. <br /><br />
+
+        I menyen 'Default' kan man sette en del default-filer. Dette er filer som da automatisk vil bli valgt i nedtrekksmenyer. For apotek og MD-apotek <br />
+        er disse helt nødvendig å sette. <br />
+
+        <h3>Meldinger</h3>
+        I fanen 'Meldinger' kan man sende inn alle typer enkeltmeldinger. Du kan filtrere på meldingene slik at f.eks kun utleverermeldingene vises.<br />
+        Funksjonaliteten er slik: I nedtrekksmenyen 'Meldinger' velger man ønsket type melding. Basefiler av riktig type vil vises i lista. Typen er bestemt av filnavnet, <br />
+        f.eks må en M1-melding alltid starte med 'M1_'. <br />
+        Deretter velger man korrekt basefil. Dersom man ønsker å sende inn denne fila som den er kan man la nedtrekksmenyene 'Sender', 'Rekvirent' etc stå til <br />
+        'Bruk ... i meldingen', da vil respektiv subkomponent ikke byttes ut. <br /><br />
+
+        For å sende inn meldingen, klikk på 'Send til RF'. Dersom meldingen krever personlig signatur, og du bruker smartkort, kan du først legge inn PIN-koden i datafeltet 'PIN'. <br />
+        Dersom du bruker softcert uten PIN for rekvirenten, kan du utelate pin-koden.<br /><br />
+
+        Etter at meldingen er sendt kan du følge prosessen i resultatvinduet. Dr Who vil forsøke å parse svaret som kommer tilbake og presentere dataene på en enkel måte i vinduet.<br />
+        Den komplette responsmeldingen, samt innsendt melding, logges i log-katalogen. Sist innsendte melding, og respons, er også lett tilgjengelig vha knapper på høyre side.<br />
+
+        <h3>Intercept</h3>
+        For de fleste funksjoner i Dr Who kan man intercepte meldinger. Meldingen vil da åpnes i et vindu slik den er etter at den er ferdig, <br />
+        men like før evt personlig signatur er lagt til. Du kan dermed dobbeltsjekke den ferdige meldingen, og evt gjøre endringer før meldingen sendes.<br />
+        For SFM-meldinger vil du i tillegg få opp et vindu der du kan editere, og/eller fjerne claims fra jwt-tokenet. Du kan også endre signaturalgoritme.
+    </p>
+    <h2><a id="apotek">Apotek</a></h2>
+    <p>
+        Dr Who tilbyr enkel apotek-funksjonalitet slik at man kan få laget en utlevering på en resept. Funksjonaliteten er avhengig av at defaultfilene er satt<br />
+        opp korrekt under menyen 'Default'. Disse filene du velger må da inneholde en 'sender'-komponent som tilsvarer apoteket ditt.<br /><br />
+        
+        For å laste ned en reseptliste, skriv inn FNR/DNR og klikk 'Hent reseptliste'. For å utlevere på en resept, velg den i lista, og klikk 'Utlevér'.<br /><br />
+        
+        For å kunne utlevere direkte på denne måten må resepten inneholde en legemiddelpakning. For de andre typene er man avhengig av å velge en annen vare (intervensjon). <br />
+        Da kan man klikke på 'Velg vare'. Da vil man kunne velge utleveringselementer som det istedet vil bli utlevert på. Disse elementene hentes fra katalogen 'Utleveringer'.<br />
+        Det følger med noen eksempler, men du kan også utvide og legge til nye her. For en korrekt melding bør du også velge opsjonen 'Intervensjon', da blir denne tagen satt.<br /><br />
+
+        Du kan også annullere en utlevering ved å klikke 'Annullér'. Dette fungerer kun like etter en utlevering, du kan ikke annullere eldre utleveringer i denne toolen. <br /><br />
+
+        Dersom en av reseptene dine har havnet i en 'Under ekspedering'-tilstand kan du kansellere denne nedlastingen. Velg resepten, og klikk deretter 'Kansellér nedlasting'. <br>
+        NB! Dette fungerer kun dersom det er ditt eget apotek som har lastet den ned.<br /><br />
+
+        Opsjonen 'Siste utlevering' kan settes dersom du ønsker at resepten ikke skal ha flere utleveringer igjen.<br />
+    </p>
+    <h2><a id="mdapotek">Multidose-apotek</a></h2>
+    <p>
+        Dr Who tilbyr enkel MD-apotek-funksjonalitet, bl.a sending av M25.2/M25.3, og oppmelding/avmelding (M27.1). Funksjonaliteten er avhengig av at defaultfilene er satt<br />
+        opp korrekt under menyen 'Default'. Disse filene du velger må da inneholde en 'sender'-komponent som tilsvarer MD-apoteket ditt.<br /><br />
+
+        For å laste ned en en LIB-melding (9.12), skriv inn FNR/DNR og klikk 'Hent LIB'. <br />
+        Dersom du ikke er registrert som pasientens MD-apotek, kan du klikke på 'Send M27.1' med registrering valgt.<br /><br />
+
+        For å sende M25.2, klikk på 'Send M25.2'. Dersom du ønsker kan du legge til spørsmål, allergier, og merknad. Du vil få dialogvinduer underveis dersom <br />
+        du har sjekket av disse opsjonene. For allergiene er det kun lagt inn en eksempelverdi av hver type. Dersom du er avhengig av andre allergier, må du intercepte <br />
+        og endre dette manuelt.<br /><br />
+
+        For å lage en utlevering, klikk på 'Send M10 + M25.3'. Du vil få muligheten til å velge hvilket LIB-element du ønsker å utlevere på. Det vil bli generert en M10, <br />
+        og til slutt en M25.3. NB! Det må være en legemiddelpakning for å kunne utlevere på denne måten. <br />
+        En merknad kan også legges til.<br /><br />
+
+        MD-apoteket har også funksjonalitet for å legge til løse resepter, dvs resepter som ikke ligger i LIB. Klikk på 'Hent løse resepter', og det vil bli sendt en M9.1, <br />
+        og du vil få en liste over evt løse resepter. De du velger vil da bli lagt til i M25.2 når du senere sender den, inkludert spørsmålet 'Skal varen inkluderes i Legemidler i bruk (LIB)?'<br /><br />
+
+        Du kan også legge til papirresepter. Klikk på Generér for å åpne en dialog der du kan generere en basert på en resept og en rekvirent som du kan velge. <br />
+        Her velger du blant resepter og rekvirenter som ligger på disk i de respektive kataloger, og her kan du selv legge til nye elementer dersom ønskelig. <br />
+        En GUID vil bli generert som din resept-id dersom du ikke spesifiserer den selv. Papirresepten du har lagd vil nå bli lagt til i M25.2 inkludert spørsmålet <br />
+        'Skal varen inkluderes i Legemidler i bruk (LIB)?'. Du kan også legge den til i M25.3.<br /><br />
+
+        Dersom en av reseptene dine har havnet i en 'Under ekspedering'-tilstand kan du kansellere denne nedlastingen. Velg resepten, og klikk deretter 'Kansellér nedlasting'. <br>
+        NB! Dette fungerer kun dersom det er ditt eget MD-apotek som har lastet den ned.<br /><br />
+    </p>
+    <h2><a id="hn">Helsenorge</a></h2>
+    <p>
+        I fanen 'Helsenorge' kan man teste de ulike helsenorge-meldingene. Skriv inn FNR, og klikk på ønsket funksjon. Resultatet vil parses og presenteres i resultatvinduet.<br /><br />
+
+        Helsenorge-meldingene benytter jwt-tokens som sikkerhetsmekanisme. Toolen vil automatisk generere et slikt token. Dersom du ønsker å overstyre verdier i dette tokenet, <br />
+        kan du velge opsjonen 'Intercept'. Du vil da få opp et vindu der du kan editere, eller fjerne claims. Du kan også endre signaturalgoritme.<br />
+    </p>
+    <h2><a id="kombi">Kombinasjonsinnsending</a></h2>
+    <p>
+        Følgende ulike kombinasjonsinnsendinger finnes: <br /><br />
+
+        M1-kombi: Send inn et sett med resepter for et sett med pasienter. Alle resepter valgt vil sendes inn for alle pasienter valgt.<br />
+        LIB-kombi: Samme som M1-kombi, men i tillegg vil det bli sendt inn LIB-melding for hver pasient. I tillegg er det mulig å lese pasienter fra fil.<br />
+        M1-fordeling: Send inn et tilfeldig antall resepter på hver pasient, men basert på en sannsynlighet. Sannsynligheten settes opp i en tekstfil.<br />
+        Verify: Send inn en verifymelding per organisasjon. Organisasjonene spesifiseres i en tekstfil.<br />
+        9.5: Send inn 9.5 for et sett med pasienter. Du vil tilslutt få en oppsummering av antall pasienter som har 0, 1, eller flere resepter.<br />
+        9.11: Send inn 9.11 for et sett med pasienter. Du vil tilslutt få en oppsummering av MD-info for pasientene.<br />
+    </p>
+    <h2><a id="sfm">SFM</a></h2>
+    <h3>Oppsett</h3>
+    <p>
+        Dersom du ikke allerede har gjort det: det første du bør gjøre er å sette riktig datakatalog. Filer du trenger i SFM vil alltid legges i en struktur under valgt <br />
+        datakatalog. I Innstillinger/ Generelt: Det anbefales å velge 'Bruk valgfri folder' og beholde default folder (c:\eresept\drhwo).<br /><br />
+
+        Fila sfmklient.txt brukes ved nedlasting av tokens fra HelseId, og må ligge i valgt datakatalog (tom versjon vil opprettes automatisk hvis den ikke finnes).<br />
+        Denne inneholder informasjon om aktuelle klienter (organisasjoner): navn, klient-id, evt parentorg/childorg (orgnr), og den private nøkkelen (hemmeligheten) på xml-format.<br />
+        Hver klient ligger på en linje. To formater støttes avhengig av om du skal spesifisere parent/child unit eller ikke. <br />
+        Nedlasting vil gjøres på to forskjellig måter avhengig av dette. <br /><br />
+        Uten parent/child: <code>&ltname&gt:&ltclientId&gt:&ltkey&gt</code><br />
+        Med parent/child: <code>&ltname&gt:&ltclientId&gt:&ltparentorg&gt:&ltchildorg&gt:&ltkey&gt</code><br />
+        Merk at dersom du skal oppgi kun parent og ikke child, må child stå tomt, dvs du må likevel ha 5 elementer, kolon-separert.<br /><br />
+
+        For at Dr Who skal kunne laste ned et token må den aktuelle organisasjonen være korrekt satt opp i HelseId. <br />
+        Dr Who forventer bl.a at redirect_uri er satt til 'http://localhost:6501/signin-oidc'. <br /><br />
+
+        For testing av api-ene hentes aktuelle testmiljø (url-er) fra en fil. Denne kan du vedlikeholde selv.<br />
+        For Basis: Fila heter sfmklienturl.txt. Denne ligger i katalogen 'fhir'.<br />
+        For Datadeling: Fila heter sfmdatashareurl.txt. Denne ligger i katalogen 'fhirdatashare'.<br />
+    </p>
+    <h3>Bruk</h3>
+    <h4>Nedlasting av token</h4>
+    <p>
+        For å kunne bruke basis-apiet må toolen først laste inn et token. Dette gjør du i dialogen Token (meny: Token). Dersom du har et token<br />
+        du har skaffet et annet sted kan du bare lime det inn her, og lagre. Alternativt kan du bruke nedlastingsfunksjonen: velg klient (organisasjon), <br />
+        scope (default er satt), og klikk 'Get Token'. Nå vil det åpnes en browser mot HelseID, og du kan fortsette å logge inn som rekvirent. <br />
+        Token vil så bli lastet inn i vinduet, og du kan klikke 'Save'.<br /><br />
+        NB! Implementasjonen har noen svakheter, og det kan oppstå problemer hvis du skal laste token flere ganger.<br />
+        Hvis dette skjer må du restarte Dr Who for å få nedlasting til å fungere igjen.<br />
+    </p>
+    <h4>Basis</h4>
+    <p>
+        Toolen for å teste Basis API startes fra menyen: SFM - Basis.<br /><br />
+        <b>Generelle funksjoner: </b><br /><br />
+        FHIR URL: Velg miljø du går mot.<br />
+        PreferredReturn: Angir hvor mye som skal returneres fra FHIR-server.<br />
+        Intercept: Stopp meldingen for inspeksjon/editering like før den sendes. (Kan velges på Read/Search og/eller Create/Update/Operation)<br />
+        Login-felt: HPR fra token vises her (innlogget rekvirent). Det vises også valgt organisasjon (hentet fra Token-vinduet)<br />
+        Attester Organization: Denne knappen åpner en dialog, der du kan velge hvordan du evt skal attestere: med en ref til en org på server eller en vedlagt org i bundelen.<br />
+        Refresh: Reinitialiserer comboboxer med evt. nye data<br />
+        Request/Response vinduene: Siste request og siste response vil til enhver tid vises her.<br />
+        Open: Åpner siste response i notepad++<br />
+        Log: Åpner loggkatalogen i explorer.<br />
+        FHIR-directory: Åpner 'fhir'-katalogen i explorer.<br /><br />
+
+        <b>Patient:</b><br />
+        I denne taben testes operasjonene for pasienten: get/sendMedication og register/DeregisterResponsibility.<br />
+        Pasientinformasjon lagres kun lokalt og benyttes som inputparameter til operasjonene. Klikk på 'Create' for å lage en pasientfil.<br /><br />
+
+        Medication: Etter at man har hentet en medication, kan man klikke på denne knappen. I det nye vinduet får man da muligheten til å inspisere<br />
+        og gjøre endringer på en relativ enkel måte. Hvert objekt i listene tilsvarer en entry i bundelen. Du kan dobbeltklikke for å åpne objektet.<br />
+        I det nye vinduet kan man både inspisere og endre manuelt på denne entryen.<br />
+        I tillegg vil f.eks en MedicationStatement inneholde en referanse til en Medication, denne kan igjen åpnes fra det nye vinduet med knappen 'Medication'.<br />
+        Man kan også høyreklikke på objekter, da vil man få flere muligheter utføre operasjoner, f.eks tilbakekalle og fornye objekter. Nødvendige json-strukturer vil da bli lagt til i entryen.<br />
+        Etter utførte operasjoner, kan man klikke 'Save', og deretter sendMedication for å sende inn dine endringer.<br />
+        For å legge til en ny medisinering, annen resept eller allergi, må man først ha en template (mal). Denne kan lages ved å finne et eksisterende objekt, f.eks fra en annen pasient, og klikke på 'Save template'.<br />
+        Senere kan man da legge til denne som ny resept. Toolen vil da automatisk oppdatere mange felt med nye tidspunkt, ny reseptid etc.<br /><br />
+
+        <b>Organization / Person / Practitioner </b><br />
+        Disse beskrives under ett da de er veldig like. <br /><br />
+        Read: For å lese ut et objekt må man sende inn en Id. Denne kan puttes inn i id-feltet, eller lettere: man kan ha de lagret i id-filer. Disse filene inneholder kun<br />
+        id'en til objektet. Man kan lage de manuelt, men de vil også bli laget dersom man selv har opprettet objektet gjennom 'Create'. <br />
+        De kan også bli laget automatisk fra et søkeresultat gjennom å velge 'Generate Id-files' når du søker.<br />
+        Update: Oppdater et objekt. Gjøres ved å først ta en Read. Deretter vil update åpne Intercept-dialogen, og du kan endre objektet.<br />
+        Search: Søk fram til objekter vha søkefelt.<br />
+        Create: Opprett nytt objekt. Ikke alle mulige felt er støttet av toolen. Det er mulig å manuelt legge til mer json vha Intercept. Id-fil vil bli generert automatisk<br /><br />
+
+        <b>Task</b><br />
+        Utfør en task ved å legge inn aktuelle data, og klikk Search.<br /><br />
+
+        <b>Meta</b><br />
+        Her finner du CapabilityStatement samt OperationDefinition for operasjonene.<br /><br />
+
+     </p>
+    <h4>Datadeling</h4>
+    <p>
+        Toolen for å teste Datadeling API startes fra menyen: SFM - Datashare.<br /><br />
+        <b>Generelle funksjoner: </b><br /><br />
+        FHIR URL: Velg miljø du går mot.<br />
+        PreferredReturn: Angir hvor mye som skal returneres fra FHIR-server.<br />
+        Intercept: Stopp meldingen for inspeksjon/editering like før den sendes. (Kan velges på Read/Search og/eller Create/Update/Operation)<br />
+        Login-felt: HPR fra token vises her (innlogget rekvirent). Det vises også valgt organisasjon (hentet fra Token-vinduet)<br />
+        Dersom pasientbillett er lastet inn vises dette også her.<br />
+        Refresh: Reinitialiserer comboboxer med evt. nye data<br />
+        Request/Response vinduene: Siste request og siste response vil til enhver tid vises her.<br />
+        Open: Åpner siste response i notepad++<br />
+        Log: Åpner loggkatalogen i explorer.<br />
+        FHIR-directory: Åpner 'fhirdatashare'-katalogen i explorer.<br /><br /><br />
+
+        <b>For de følgende operasjonene må man være innlogget med practitioner-rettigheter:</b><br /><br />
+        <b>Patient:</b><br />
+        I denne taben kan man opprette pasienter, oppdatere, søke etter, lese ut, samt hente pasientbillett for pasienten.<br /><br />
+
+        <b>List:</b><br />
+        Hent/Søk medisiner (List) for en pasient. Pasientbillett må være nedlastet.<br /><br />
+
+        <b>MedicationStatement:</b><br />
+        Hent/Søk etter en MedicationStatement for en pasient. Pasientbillett må være nedlastet.<br /><br />
+
+        <b>AllergyIntolerance:</b><br />
+        Hent/Søk etter allergier for en pasient. Pasientbillett må være nedlastet.<br /><br />
+
+        <b>Condition:</b><br />
+        Opprett/oppdater en condition for en pasient. Pasientbillett må være nedlastet.<br /><br />
+
+        <b>Observation:</b><br />
+        Opprett/oppdater/søk for en observation for en pasient. Pasientbillett må være nedlastet.<br /><br /><br />
+
+        <b>For de følgende operasjonene må man være innlogget med admin-rettigheter (Person):</b><br /><br />
+
+        <b>Patient / Organization / Person / Practitioner </b><br />
+        Disse beskrives under ett da de er veldig like. <br /><br />
+        Read: For å lese ut et objekt må man sende inn en Id. Denne kan puttes inn i id-feltet, eller lettere: man kan ha de lagret i id-filer. Disse filene inneholder kun<br />
+        id'en til objektet. Man kan lage de manuelt, men de vil også bli laget dersom man selv har opprettet objektet gjennom 'Create'. <br />
+        De kan også bli laget automatisk fra et søkeresultat gjennom å velge 'Generate Id-files' når du søker.<br />
+        Update: Oppdater et objekt. Gjøres ved å først ta en Read. Deretter vil update åpne Intercept-dialogen, og du kan endre objektet.<br />
+        Search: Søk fram til objekter vha søkefelt. Opsjoner: 'Generate Id-files' vil lage id-filer av alle søkeresultat. <br />
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbspFor 'Patient' og 'Practitioner' finnes opsjonen 'Generate patient/practitioner list', denne vil lage en liste som kan brukes til å opprette de samme objektene i en annen organisasjon.<br />
+        Create: Opprett nytt objekt. Ikke alle mulige felt er støttet av toolen. Det er mulig å manuelt legge til mer json vha Intercept. Id-fil vil bli generert automatisk<br />
+        Create from list: Denne opsjonen finnes for Patient og Practitioner. Man kan benytte en fil generert i et tidligere søk for å opprette mange objekter på en gang i en annen organisasjon.<br /><br />
+
+        Under practitioner-taben finnes også ResetPIN-funksjonen. Denne vil resette pin for en practitioner.<br /><br />
+
+        <b>Medication</b><br />
+        Søk etter en Medication i SFM.<br /><br />
+
+        <b>Substance</b><br />
+        Søk etter en Substance i SFM.<br /><br />
+
+        <b>Task</b><br />
+        Søk/Get en Task i SFM.<br /><br />
+
+        <b>Meta</b><br />
+        Her finner du CapabilityStatement samt Session Create/End.<br /><br />
+
+        <b>FM</b><br />
+        Her finner du testing av FM API. Dette er et subsett av API-et til Forskrivningsmodulen, og skal fungere tilsvarende. Data overføres på XML-format.<br />
+        For de operasjonene som krever pasientbillett vil FM API bruke samme billett som resten av datadelings-apiet.<br />
+        For Pasient: De samme id-filene som du finner og genererer i 'Patient' vil gjenbrukes her.<br />
+
+    </p>
+    
+    <h3>Autotesting SFM</h3>
+    <p>
+        <h4>Organization and Description</h4>
+        Autotesting for SFM is opened from the menu 'SFM - Auto'. <br />
+        The autotests are organized in a three-level structure which are displayed in three windows:<br /><br />
+        <b>Mastersuite:</b>  A file that contains the top-level information, like name, suits, url's, tokens and variables to be used in this mastersuite. Typically you will setup one mastersuite per organization.<br />
+        <b>Suite:</b> A file that contains a collection of testcases. <br />
+        <b>Testcase:</b> A file that contains one testcase, containing one or many teststeps. <br /><br />
+
+        All files are in a json-format, with certain keywords, see overview of keywords below. <br />
+        Tests can be run by selecting and clicking. At suite-level: if you click one suite, and click 'Run', all tests in that suite will run. <br />
+        You can also select multiple suites at once, then all tests in all suites will be run. <br />
+        You can also run tests on the testcase-level: select one or more testcases to run them individually. <br /><br />
+
+        <h4>Usage of Variables</h4>
+        You can define any variable in the mastersuite. This will be a kind of static variabel. They can be referenced throughout all testcases for most keywords, <br />
+        and is useful when using the same data multiple times, for example when you use the same patient in many testcases.<br />
+        They are referenced using the character '%' around the name, like this: <code>%firstname%</code>. It is also possible to reference a variable as a substring, and you can even <br />
+        reference multiple variables from one string, for example: <code>"identifier=%firstname% %lastname%"</code>. See examples below for further usage.<br /><br />
+
+        <h4>Usage of Tokens</h4>
+        Tokens are used in all communication with SFM, and they need to be set in the mastersuite. They are given a name, and they can then be referenced at all levels.<br />
+        Tokens set a a lower level will override tokens set at a higher level. For example, if a token is set at a suite level, it will be used in all tests in that suite. But if <br />
+        one test in that suite has a different token set, that will override the token set in the suite for this test. <br />
+        They are stored and work just like variables, and referenced like this: <code>%persontoken%</code>. See examples below for further usage.<br /><br />
+
+        <h4>Compare</h4>
+        Compare is a special type of teststep that compares the content between two bundles, or two lists, and fails if there are significant differences between them. <br />
+        You can compare the result of two previous run teststeps, or you can compare a result towards a file, i.e a result previously saved. <br />
+        Dr Who will automatically ignore differences that are known to be different for every call. For example are the fhir-ids for the entries in getMedication regenerated every time. <br />
+        Currently supported resources you can compare: GetMedication, MedicationStatement, List.
+
+        <h4>Keyword overview</h4>
+        <pre>
+        <code>
+        Mastersuite:
+
+            name:      Name of this Mastersuite.
+            url:       The url set here will be used in all calls by tests in this mastersuite, unless overridden by an url set in variables.
+            tokens:    Set tokens used here. They are saved as variables, and must be set at suite, testcase or teststep level.
+            variables: Set variables here. Can be referenced in all testcases in this mastersuite.
+            suites:     A list of suites (filenames) contained in this mastersuite. The files need to be located in a folder with the same name as the name of the mastersuite.
+        
+        Suite:
+        
+            url:       Set url to be used in tests in this suite.
+            token:     Set token to be used in tests in this suite.
+            tests:     A list of tests contained in this suite. The files need to be located in a folder called 'tests' in the suitefolder.
+        
+        Testcase:
+        
+            Testcase-level:
+            stopwhenfail: If this is set to true, the test will stop if a step fails, i.e it will not run the remaining teststeps.
+            url:          Set url to override url set in suite.
+            token:        Set token to override token set in suite.
+            steps:        Array of teststeps.
+
+                Teststep-level:
+                url:          Set url to override url set in testcase or suite.
+                token:        Set token to override token set in testcase or suite.
+                ignore:       If this is set to true, the teststep will not be run.
+                errornote:    Give a note about the reason this teststep currently fails. Useful for temporary, known errors.
+                sleep:        Sleep (delay) for a given number of milliseconds before this teststep is executed.
+
+                request:     Defines the request. Mandatory in all teststeps, except compare-tests.
+                    type:            Type of request.
+                    resource:        Which type of resource this request handles.
+                    id:              Id of a resource.
+                    patientticket:   Specify the patientticket in a request. (Datashare)
+                    pid:             Enter the PID of a patient. (Datashare)
+                    criteria:        Array of searchcriteria. (Datashare)
+                    patient:         A reference to a file containing a patient. (Basis)
+                    history:         History timestamp in getMedication (Basis)
+                    samtykkekj:      Sets the SamtykkeKjernejournal parameter in getMedication. (Basis)
+                    samtykkesperret: Sets the SamtykkeSperretLegemidler parameter in getMedication. (Basis)
+                    samtykkelaste:   Sets the SamtykkeLasteResepter parameter in getMedication. (Basis)
+                    operation:       Specify special operations in the sendMedication (new, renew, recall, createpll) (Basis)
+                    medication/other/allergy: Specify a file for sendMedication containing a template for the given resource. (Basis)
+                    code:            Specify a code, for example recall code. (Basis)
+                    refnr:           Specify a referencenumber for getMedication. (Basis)
+                    reseptid:        Specify a reseptid (for renew and recall). (Basis)
+                    save:            Save a string/resource. The type of request/resource will decide what resource is saved.
+                    load:            Load a string/resource. Must be set in earlier teststep, and will be used in this teststep, based on request/resouce.
+
+                response:     Defines the acceptance criteria for a response.
+                    contains:        Array of strings which must be found in response. Case-sensitive.
+                    notcontains:     Array of string which cannot be found in response. Case-insensitive.
+                    httpstatus:      Httpstatus of response.
+                    count:           A count of how many times (x) a string should occur in response. Structure: "string, x". Case-sensitive.
+                    elementcontains: A structure for setting a criteria, deciding that a collection of strings should be found in the same element. Case-sensitive.
+                        entry:         An array of strings that should be found in the same entry (for Bundle). Array of array of strings ca be set for multiple checks.
+                        contained:     An array of strings that should be found in the same contained element (for List). Array of array of strings ca be set for multiple checks.
+                        For both entry and contained: First string in array may be 'count:X', in this case the strings need to be found in exactly X elements.
+
+                compare:      Defines a compare test.
+                    type:        Which type of compare test.
+                    data:        Which data to compare. Array of exactly two strings. Can point to saved bundle/list, or point to file.
+                    include:     Specify which element(s) to include in the compare. For example: 'MedicationStatement'. All other elements will be ignored.
+                    ignore:      Specify which element(s) to ignore in the compare. All other elements will be compared.
+
+            </code>
+        </pre>
+        <h4>Examples</h4>
+
+        <pre><code>
+        Mastersuite:
+
+        {
+            "name": "Galdhøpiggen",
+            "url": "https://datashare.test2.forskrivning.no",
+            "tokens":
+            {
+                "practitioner": "insert token here",
+                "person": "insert token here"
+            },
+            "variables":
+            {
+                "firstname": "Tim",
+                "lastname": "Holmen"
+            },
+            "suits": [
+                "SuitePractitioner.json",
+                "SuitePractitioner_NEG.json",
+                "SuitePractitioner_NEGUSER.json",
+                "SuitePerson.json",
+                "SuitePerson_NEG.json",
+                "SuitePerson_NEGUSER.json"
+             ]
+        }
+       
+
+        Suite:
+      
+        {
+            "token": "%practitioner%",
+            "tests": [
+                "ReadPatient.json",
+                "ReadPatientTicket.json",
+                "SearchPatient.json",
+                "SearchList.json",
+                "SearchAllergyIntolerance.json",
+            ]
+        }
+       
+
+        Testcases:
+       
+        {
+            "steps": [
+                {
+                    "request": 
+                    {
+                        "type": "search",
+                        "resource": "Patient",
+                        "criteria": [ "name=%firstname%" ]
+                    },
+                    "response":
+                    {
+                        "httpstatus": "200",
+                        "contains": [ "searchset", "Tim", "Holmen" ],
+                        "notcontains": "error"
+                    }
+                }
+        }
+        ---              
+        {
+            "stopwhenfail": "true",
+            "steps": [
+                {
+                    "request":
+                    {
+                        "type": "session",
+                        "resource": "PatientTicket",
+                        "pid": "45010388159",
+                        "save": "ticket"
+                    },
+                    "response":
+                    {
+                        "notcontains": [ "exception", "error" ]
+                    }
+                },
+                {
+                    "request":
+                    {
+                        "type": "search",
+                        "resource": "AllergyIntolerance",
+                        "patientticket": "%ticket%"
+                    },
+                    "response":
+                    {
+                        "httpstatus": "200",
+                        "contains": [ "searchset", "%ticket%" ],
+                        "notcontains": [ "exception", "error" ]
+                    }
+                }
+            ]
+        }
+        ---
+        {
+            "stopwhenfail": "true",
+            "steps": [
+                {
+                    "request":
+                    {
+                        "type": "getMedication",
+                        "patient": "Leon Auto Leirvik.json",
+                        "history": "2021-03-01T00:00:00+01:00",
+                        "samtykkekj": "HPMOTTATTSAMTYKKE",
+                        "samtykkesperret": "HPMOTTATTSAMTYKKE",
+                        "samtykkelaste": "HPMOTTATTSAMTYKKE",
+                        "save": "bundle"
+                    },
+                    "response":
+                    {
+                        "httpstatus": "200",
+                        "contains": [ "sfm-MedicationBundle", "12d4575c-f8bf-41bc-be0a-1b93554b0bfe", "fc4b18e3-be83-4f33-9c95-d33c464919e4" ]
+                        "elementcontains" : 
+                        {
+                           "entry": [ [ "count:2", "Døgn", "Barnesykdommer" , "tablett"], [ "ID_2220E1C3", "Ibuprofen DEPOTtab 800 mg"] ]
+                        }
+                    }
+                },
+                {
+                    "request":
+                    {
+                        "type": "sendMedication",
+                        "load": "bundle"
+                    },
+                    "response":
+                    {
+                        "httpstatus": "200",
+                        "contains": [ "recallCount", "prescriptionCount" ],
+                        "notcontains": [ "Exception" ]
+                       
+                    }
+                },
+                {
+                    "compare":
+                    {
+                        "type": "getMedication",
+                        "data": [ "%filepath_compare%GetMedicationCompare_LAL_Test.txt", "bundle" ]
+                    }
+                }
+            ]
+        }
+        </code></pre>
+    </p>
+
+    <h2><a id="auto">Autotesting RF</a></h2>
+    <h3>Introduksjon</h3>
+    <p>
+        I hovedmenyen ligger valget 'Auto', denne vil åpne vinduet for automatiserte testcaser. <br />
+        Testcaser spesifiseres i et xml-format, se eksempler for syntaks. <br /><br />
+
+        Testcaser legges i foldere (kall gjerne hver enkelt folder for en 'suit'), og folderene må lages under en 'master' suite-folder. <br />
+        Denne folderen er foreløpig satt til 'suits' og må ligge under folderen 'autotester' (Denne suit-folderen vil sannsynligvis bli konfigurerbar i framtiden).<br />
+        NB! Dette kapittelet beskriver autotesting mot RF, ikke autotestene mot SFM.<br />
+    </p>
+    <h3>Beskrivelse av testcase-fila</h3>
+    <p>
+        <h4>Eksempelfil</h4>
+        <pre><code>
+            &lt?xml version="1.0" encoding="UTF-8" ?&gt
+            &ltEreseptTest&gt
+                &ltIkkeStopp /&gt
+                &ltStep&gt
+                    &ltSend&gt
+                        &ltM1 pasient="IainBedreHelse.xml" resept="M1_Merkevare_Nexium20mg.xml" rekvirent="LegeMFH.xml"&gtM1_Base.xml&lt/M1&gt
+                        &ltModify type="2" xpath="//mh:Ident[2]"&gt
+                            &lt![CDATA[&ltIdent&gt
+                                &ltId&gt95127&lt/Id&gt
+                                &ltTypeId DN="HER-id" V="HER" S="2.16.578.1.12.4.1.1.9051" /&gt
+                            &lt/Ident&gt]]&gt
+                        &lt/Modify&gt
+                        &lt!-- Morten Fos Helle --&gt
+                        &ltCert serialno="7BC906AF0BEE125566FF" pin="" /&gt
+                        &ltLagre&gtmsgid&lt/Lagre&gt
+                        &ltLagre ns="mh" tag="GenDate"&gtdato&lt/Lagre&gt
+                    &lt/Send&gt
+                    &ltForventet&gt
+                        &ltAppRec status="OK" /&gt
+                    &lt/Forventet&gt
+                &lt/Step&gt
+            &lt/EreseptTest&gt
+        </code></pre>
+        <h4>Støttede meldinger</h4>
+        Følgende meldinger er støttet, og skal angis i testcasefila (i Send-noden) med følgende tekst:<br /><br />
+        <code>
+            M1,
+            M3,
+            M41,
+            M5,
+            M91,
+            M93,
+            M95,
+            M97,
+            M911Rekvirent,
+            M911Utleverer,
+            M921Rekvirent,
+            M921Utleverer<br />
+            M241,
+            M251,
+            M252,
+            M253,
+            M10,
+            M271Rekvirent,
+            M271Utleverer,
+            PV,
+            MV<br />
+            SFM_M1,
+            SFM_M41,
+            SFM_M5,
+            SFM_M95,
+            SFM_M97,
+            SFM_M911,
+            SFM_M921,
+            SFM_M241,
+            SFM_M251,
+            SFM_M271<br />
+            M9NA1,
+            M9NA3<br />
+            GetResepter,
+            GetInnsynV1,
+            GetLegemidler,
+            GetReseptliste
+        </code>
+
+        <h4>Tags</h4>
+        <code>&ltIkkeStopp/&gt</code>: Kjør alle steps, selv om noen feiler. Tagen må være på testcase-nivå (ikke i step).<br />
+        <code>&ltStep&gt</code>: Testcasen kan inneholde en eller flere teststeps. Vil bli kjørt i sekvens.<br />
+        <code>&nbsp&nbsp&ltSend&gt</code>: Inneholder informasjon om meldingen som skal sendes.<br />
+        <code>&nbsp&nbsp&nbsp&nbsp&ltM1&gt</code>: Spesifiserer hvilken melding som skal sendes (se liste over). Kan inneholde attributter, se beskrivelse under.<br />
+        <code>&nbsp&nbsp&nbsp&nbsp&ltModify&gt</code>: Ved å bruke modify kan du endre på meldingen på en generell måte ved hjelp av xpath. Se detaljert beskrivelse under.<br />
+        <code>&nbsp&nbsp&nbsp&nbsp&ltCert serialno="7BC906AF0BEE125566FF" pin=""&gt&lt/Cert&gt</code> : Angi sertifikat, dette trigger signering. Det angis tom (eller manglende) pin for softcerts.<br />
+        <code>&nbsp&nbsp&nbsp&nbsp&ltLagre&gt</code>: Lagre en verdi for bruk i senere step. Innholdet i noden er et variabelnavn som du velger selv.<br />
+        <code>&nbsp&nbsp&nbsp&nbsp&ltHent&gt</code>: Hent en verdi lagret i tidligere step. Innholdet må matche samme variabelnavn som du valgte i tidligere step.<br />
+        <code>&nbsp&nbsp&ltForventet&gt</code>: Inneholder alltid en forventet respons, og kan også inneholde ytterligere ett eller flere akseptansekriterier. Se kapittel nedenfor.<br />
+        <code>&nbsp&nbsp&ltSleep&gt</code>: Opsjonell tag der du kan spesifisere antall millsekunder dette teststep skal vente før det utføres. F.eks: <code>&ltSleep&gt3000&lt/Sleep&gt</code><br />
+
+        <h4>Generelt</h4>
+        Generelt ved bruk av attributter i test-fil:<br />
+        * Ved å ikke angi en attributt, gjøres ingenting. Verdi i basefila beholdes.<br />
+        * Ved å angi attributt="": tom streng settes inn.<br />
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbspSpesialunntak:<br />
+
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<code>pin=""</code>: ingen pin benyttes, ok for softcerts.<br />
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<code>sender, rekvirent, pasient, resept=""</code>: dette betyr at det byttes ikke ut noe<br />
+
+        * Ved å angi <code>attributt="remove"</code>: fjern noden. (for verify foreløpig)<br /><br />
+
+        <h4>Manipulering</h4>
+
+        <h5>Generell manipulering</h5>
+        Følgende attributter kan benyttes i alle meldinger der det respektive elementet støttes:<br />
+        <code>version="2.4"</code>: Fila er på 2.4 versjon, og 2.4 namespace vil benyttes. Støttes for M1, M5, 9.1/2, 9.5/6 og M10. Responsen (f.eks 9.2) vil også tolkes som 2.4<br />
+        <code>msgid="keep"</code>: Ikke bytt ut msgid<br />
+        <code>pasient="IainBedreHelse.xml</code>: Bytt ut pasient med pasient fra spesifisert fil<br />
+        <code>rekvirent="LegeMFH.xml"</code>: Bytt ut rekvirent med rekvirent fra spesifisert fil<br />
+
+        <h5>M1-manipulering</h5>
+        Følgende attributt kan benyttes i M1-tagen for å manipulere meldingen:<br />
+        <code>resept="M1_Merkevare_Nexium20mg.xml"</code>: Bytt ut resept med resept fra spesifisert fil<br />
+
+        <h5>M5-manipulering</h5>
+        I M5 kan noden 'Arsak' byttes ut ved å spesifisere noden slik (under 'Send' noden):<br />
+        <code>&ltArsak DN="Test3" V="3" S="2.16.578.1.12.4.1.1.7500" /&gt</code>
+
+        <h5>MV-manipulering</h5>
+        Følgende attributter kan benyttes i MV-tagen for å manipulere meldingen:<br />
+        <code>webservice="rekvirent"</code>: Spesifiser webservice. Kan være "rekvirent", "nettapotek", eller "utleverer". "rekvirent" er default hvis ikke angitt.<br />
+        <code>systeminfo="REMOVE"</code>: Fjern hele systeminfo-noden.<br />
+        <code>operationsupplierinfo="REMOVE"</code>: Fjern hele operationsupplierinfo-noden.<br />
+        Alle enkeltelementer i disse to nodene kan manipuleres ved å bruke <code>navn="nytekst"</code>, f.eks <code>systemcode="WinMed2"</code>. Du kan også bruke "REMOVE" for å fjerne et element.<br />
+        Dersom du har flere systemcode-noder (opptil 3) kan elementene i disse adresseres ved å sette 2 eller 3 bak navnet. F.eks <code>systemcode2="Test"</code>.<br />
+
+        <h5>Lagre/Hent</h5>
+        Du kan bruke tagsene Lagre og Hent til å lagre variable, og hente de ut igjen senere i testcasen. <br />
+        Det finnes to måter å lagre på: en metode der du ikke angir hva som skal lagres, men det som lagres avhenger av hvilken melding det gjelder (default lagring).<br />
+        Ved bruk av den andre metoden (dynamisk lagring) spesifiserer du tag som skal lagres, og hvilket namespace det ligger i.<br />
+        <br />
+
+        Default lagring:<br />
+        Følgende meldinger støtter default lagring: <br /><br />
+        Lagre: <br />
+        &nbsp&nbsp<code>M1: &nbsp&nbsp&nbspLagrer msg-id</code><br />
+        &nbsp&nbsp<code>M5: &nbsp&nbsp&nbspLagrer msg-id</code><br />
+        &nbsp&nbsp<code>M25.1: Lagrer msg-id</code><br />
+        &nbsp&nbsp<code>M9.5: &nbspLagrer msg-id</code><br />
+        &nbsp&nbsp<code>MV: &nbsp&nbsp&nbspLagrer msg-id</code><br />
+        &nbsp&nbsp<code>M9.4 (respons på M9.3): Lagrer M1-objekt</code><br />
+        <br />
+        Hent:<br />
+        &nbsp&nbsp<code>M5: &nbsp&nbsp&nbspHenter msg-id, og setter denne inn som ReseptId i M5</code><br />
+        &nbsp&nbsp<code>M9.3: &nbspHenter msg-id, og setter denne inn som ReseptId i M9.3</code><br />
+        &nbsp&nbsp<code>M9.7: &nbspHenter msg-id, og setter denne inn som ReseptId i M9.7</code><br />
+        &nbsp&nbsp<code>M9.21: Henter et tidspunkt, og setter denne inn som EndringerEtter i M9.21</code><br />
+        &nbsp&nbsp<code>M10: &nbsp&nbspHenter M1-objekt, og bruker denne til å sette inn ReseptId og ReseptDokLegemiddel i M10</code><br /><br />
+
+        Dynamisk lagring:<br />
+        Alle meldinger støtter dynamisk lagring. For å spesifisere namespace og tag oppgir du dette som attributter.<br />
+        Namespace som oppgis skal være et namespace-prefix, disse finner du lenger ned i denne hjelpefila.<br />
+        Dynamisk lagring kan spesifiseres både i 'Send' og i 'Forventet'-noden (på nivået like under). På denne måten kan du lagre verdier fra meldingen du sender, <br />
+        eller fra meldingen du har mottatt (responsen).<br />
+        Eksempel som lagrer tagen GenDate i MsgHead, med variabelnavn 'dato':<br /><br />
+        <code>&nbsp&nbsp&ltLagre ns="mh" tag="GenDate"&gtdato&lt/Lagre&gt</code><br /><br />
+
+        Bruk av tagen Hent vil alltid være knyttet til default oppførsel, se støttede meldinger over. Men variable kan også hentes ut<br />
+        dynamisk for bruk i Modify-funksjonaliteten, eller for bruk i Forventet-tagen, se kapitler under.<br /><br />
+
+        <h5>Editering av JWT-Token</h5>
+        For SFM og Helsenorge-meldinger, vil RF generere et default JWT-token. Det er også mulig å manipulere dette.<br />
+        For å endre eller fjerne claims, lag en Token struktur under 'Send'-noden'. Eksempel på dette: <br /><br />
+
+        <code>
+            &ltToken&gt<br />
+            &nbsp&nbsp&ltClaim type="alg">RS512&lt/Claim&gt<br />
+            &nbsp&nbsp&ltClaim type="sub">10015628753&lt/Claim&gt<br />
+            &nbsp&nbsp&ltClaim type="exp">+400&lt/Claim&gt<br />
+            &nbsp&nbsp&ltClaim type="aud">REMOVE&lt/Claim&gt<br />
+            &lt/Token&gt<br />
+        </code><br />
+
+        I dette eksempelet vil algoritme endres til RS512, sub settes til gitt FNR, exp vil settes til 400 sek fram i tid i forhold til sende-tidspunkt, og aud vil fjernes.<br /><br />
+        For SFM-meldinger vil man kunne justere claims under act-seksjonen ved å skrive 'act:' før claimet, slik: <br /><br />
+        <code>
+            &nbsp&nbsp&ltClaim type="act:helseid://claims/client/claims/orgnr_parent"&gt123456789&lt/Claim&gt<br />
+        </code><br />
+
+        Det er også mulig å legge til claims i tokenet, ved å sette en type som ikke allerede finnes (Kun strenger, og vil alltid legges til payload).<br />
+
+        <h5>Bruk av Modify</h5>
+        Ved bruk av node 'Modify' kan du modifisere en melding på en generell måte. Du kan erstatte, sette inn eller slette xml-noder.
+        Denne metoden vil ofte kunne brukes istedetfor de mer spesifikke metodene beskrevet over. Det kreves noe kunnskap om bruk av xpath, xpath-en spesifisert
+        vil brukes til å identifisere en target-node som man kan erstatte, sette inn noe foran/etter, eller slette.<br><br />
+
+        Eksempel på bruk:<br />
+        <code>
+            &ltModify type="2" xpath="//mh:Ident[2]"&gt<br />
+            &nbsp&nbsp&lt![CDATA[&ltnodenavn&gttest&lt/nodenavn&gt]]&gt<br />
+            &lt/Modify&gt
+        </code><br /><br />
+
+        Attributten type: <br />
+        type 1: Sett inn xmlnoden før noden som matcher xpath-uttrykket. (velger kun en node, første match)<br />
+        type 2: Erstatt xmlnoden som matcher xpath-uttrykket. (velger kun en node, første match)<br />
+        type 3: Sett inn xmlnoden etter noden som matcher xpath-uttrykket. (velger kun en node, første match)<br />
+        type 4: Slett node(r) som matcher xpath-uttrykket. (velger alle noder som matcher)<br /><br />
+
+        Støttede namespace-prefix er:<br />
+        <code>"mh"</code> : MsgHead<br />
+        <code>"m1"</code> : M1 (resept)<br />
+        <code>"forskrivning"</code> : Forskrivningen i resepten<br />
+        <code>"m41"</code> : M4.1 Hent referansenummer<br />
+        <code>"m5"</code> : M5 Tilbakekalling<br />
+        <code>"m95_2015"</code> : M9.5 Hent reseptliste, 2015<br />
+        <code>"m95_2018"</code> : M9.5 Hent reseptliste, 2018<br />
+        <code>"m95_2021"</code> : M9.5 Hent reseptliste, 2021<br />
+        <code>"m97_2015"</code> : M9.7 Hent utleveringer, 2015<br />
+        <code>"m97_2018"</code> : M9.7 Hent utleveringer, 2018<br />
+        <code>"m911_2014"</code> : M9.11 Hent LIB, 2014<br />
+        <code>"m911_2018"</code> : M9.11 Hent LIB, 2018<br />
+        <code>"m911_2021"</code> : M9.11 Hent LIB, 2021<br />
+        <code>"m241"</code> : M24.1 abonnementregistrering <br />
+        <code>"m251"</code> : M25.1 MD-melding <br />
+        <code>"m271"</code> : M27.1 LIB-registrering <br />
+        <code>"mv_2013"</code> : Verify, 2013<br />
+        <code>"mv_2017"</code> : Verify, 2017<br /><br />
+
+        <code>"m3"</code> : M3 Anmodning SLV<br />
+        <code>"m91"</code> : M9.1 Reseptliste <br />
+        <code>"m93"</code> : M9.3 Resept, nedlasting<br />
+        <code>"m10"</code> : M10 Utleveringsmelding<br />
+        <code>"utl"</code> : Utlevering<br />
+        <code>"m921_2013"</code> : M9.21 Endrede MD-pasienter, 2013<br />
+        <code>"m921_2019"</code> : M9.21 Endrede MD-pasienter, 2019<br />
+        <code>"m252"</code> : M25.2 MD-melding <br />
+        <code>"m253"</code> : M25.3 MD-melding <br /><br />
+
+        <code>"m9na1"</code> : M9NA.1 Nettapotek reseptliste <br />
+        <code>"m9na3"</code> : M9NA.3 Nettapotek resept <br /><br />
+
+        <code>"ki"</code> : ki <br />
+        <code>"ms"</code> : signatur <br />
+        <code>"fk"</code> : felleskomponent1 <br />
+        <code>"bas"</code> : Base64Container <br /><br />
+
+        <code>"tilgang"</code> : tilgangsbegrensning <br />
+        <code>"pvi"</code> : PersonvernInnstilling <br /><br />
+
+        Endre modifydata dynamisk:<br />
+        Du kan også endre modifydataene dynamisk. Dette gjøres ved å bruke spesialtegnet '%'. Du kan hente fra en lagret variabel, eller benytte spesialstrenger. <br /><br />
+        Støttede spesialstrenger: <br />
+        'datetime': Nåtidspunkt på DateTime format<br />
+        'date': Dagens dato på format 'yyyy-mm-dd'<br /><br />
+        Eksempel på bruk av variabel (henter ut variabel msgid):<br /><br />
+        <code>
+            &lt![CDATA[&ltnodenavn&gt%msgid%&lt/nodenavn&gt]]&gt<br />
+        </code><br />
+        Eksempel på bruk av spesialstreng datetime (setter inn nåværende tidspunkt, trukket fra 3 dager):<br /><br />
+        <code>
+            &lt![CDATA[&ltnodenavn&gt%datetime-3%&lt/nodenavn&gt]]&gt<br />
+        </code><br />
+        Eksempel på bruk av spesialstreng date (setter inn nåværende dato, plusset på 3 dager):<br /><br />
+        <code>
+            &lt![CDATA[&ltnodenavn&gt%date+3%&lt/nodenavn&gt]]&gt<br />
+        </code><br />
+
+        Eksempler på xpath:<br />
+        <code>xpath="//mh:Ident[2]"</code> : I MsgHead, velg node nr 2 som heter 'Ident' (For type 1, 2 og 3, vil det velges kun første treff av node nr 2!)<br />
+        <code>xpath="//m1:Mengde"</code> : I M1, velg node 'Mengde'.<br />
+        <code>xpath="//forskrivning:Kortdose"</code> : I forskrivning (i M1), velg node 'Kortdose'.<br />
+
+        <h4>Forventet</h4>
+        Forventet-noden skal ha en og kun en undernode, dette er forventet respons (melding). <br />
+        Status og feilkoder kan testes mot og oppgis isåfall som attributter til denne noden. <br />
+        Dersom man ønsker å angi flere akseptansekriterier kan disse angis som undernoder til respons-noden, som alle må oppfylles for at testen skal passe. <br /><br />
+
+        Eksempler på forventet-noder:<br />
+
+        <pre><code>
+            Eksempel 1:
+            &ltForventet&gt
+                &ltAppRec status="Avvist" errorcode="123,124,*"&gt&lt/AppRec&gt
+            &lt/Forventet&gt
+
+            Eksempel 2:
+            &ltForventet&gt
+                &ltM272&gt
+                    &ltRegistrertEndring ns="m272"&gttrue&lt/RegistrertEndring&gt
+                    &ltTelecom ns="mh" notexist="true"/&gt
+                &lt/M272&gt
+            &lt/Forventet&gt
+
+            Eksempel 3:
+            &ltForventet&gt
+                &ltM92&gt
+                  &ltReseptId ns="m92"&gt%msgid_M1%&lt/ReseptId&gt
+                &lt/M92&gt
+                &ltLagre ns="m274" tag="HprNr"&gthprnummer&lt/Lagre&gt
+            &lt/Forventet&gt
+
+            Eksempel 4:
+            &ltForventet&gt
+                &ltAppRec status="OK"&gt
+                   &ltMsgType ns="apprec" V="ERM10" DN="ERM10"/&gt
+                &lt/AppRec&gt
+            &lt/Forventet&gt
+
+            Eksempel 5 (parentnode):
+            &ltForventet&gt
+               &ltM96&gt
+                  &ltReseptId ns="m96" parentnode="a">e419d936-bcc9-4e1c-8fef-7e50494e6cfc&lt/ReseptId&gt
+                  &ltTilbakekallingStatus ns="m96" parentnode="a"&gttrue&lt/TilbakekallingStatus&gt
+               &lt/M96&gt&gt
+            &lt/Forventet&gt
+
+        </code></pre>
+
+        <h5>Status</h5>
+        Status leses ut fra apprek, eller andre meldinger dersom status finnes i de. Dersom man ønsker å teste mot status <br />
+        angir man dette med attributten "status" til noden som angir forventet respons. Se øverste eksempel over.<br />
+
+        <h5>Feilkoder</h5>
+        Evt. feilkoder kan testes mot ved å angi attributten "errorcode".  Se øverste eksempel over. <br />
+        <code>errorcode=""</code>: tolkes som at det forventes ingen feil.<br />
+        <code>errorcode = "123,124"</code>: Skilletegnet ',' indikerer AND-logikk. Disse to feilene forventes. Testen feiler hvis flere feil kommer.<br />
+        <code>errorcode = "123,124,*"</code>: Disse to feilene forventes. Testen passer hvis flere feil kommer.<br />
+        <code>errorcode = "123|124"</code>: Skilletegnet '|' indikerer OR-logikk. Testen passer hvis bare en av disse feilene kommer.<br /><br />
+        Ikke oppgitt errorcode: Det sammenlignes ikke mot feilkoder (testen kan passe selv om det kommer error).<br />
+        Man kan oppgi så mange feilkoder man vil, men man må velge enten ',' eller '|', man kan ikke blande disse. <br />
+
+        <h5>Ekstra akseptansekriterier</h5>
+        Ekstra akseptansekriterier kan angis på en generell måte. Hver undernode vil være et akseptansekriterie. Se de to nederste eksemplene over. <br />
+
+        For hver kriterie må namespace (<code>ns="m1"</code>) oppgis, dette fordi systemet må vite hvilket namespace det skal søke i. <br /><br />
+
+        Støttede namespace-prefix er:<br />
+        <code>"apprec"</code> : AppRec<br />
+        <code>"mh"</code> : MsgHead<br />
+        <code>"m42"</code> : M4.2 Referansenummer <br />
+        <code>"m52"</code> : M5.2 Tilbakekalling<br />
+        <code>"m242"</code> : M24.2 Svar på abonnementregistrering<br />
+        <code>"m272"</code> : M27.2 Svar på LIB-registrering<br />
+        <code>"m274"</code> : brukt i M27.2 ved avregistrering, og i M9.2<br />
+        <code>"m96_2015"</code> : M9.6 Reseptliste, 2015<br />
+        <code>"m96_2018"</code> : M9.6 Reseptliste, 2018<br />
+        <code>"m96_2021"</code> : M9.6 Reseptliste, 2021<br />
+        <code>"m98_2015"</code> : M9.8 Utleveringer, 2015<br />
+        <code>"m98_2018"</code> : M9.8 Utleveringer, 2018<br />
+        <code>"m912_2014"</code> : M9.12 LIB, 2014<br />
+        <code>"m912_2018"</code> : M9.12 LIB, 2018<br />
+        <code>"m912_2021"</code> : M9.12 LIB, 2021<br />
+        <code>"m922_2013"</code> : M9.22 Endrede MD-pasienter, 2013<br />
+        <code>"m922_2019"</code> : M9.22 Endrede MD-pasienter, 2019<br /><br />
+
+        <code>"m92"</code> : M9.2 Reseptliste<br />
+        <code>"m94"</code> : M9.4 Resept<br /><br />
+
+        <code>"m9na2"</code> : M9NA.2 Nettapotek reseptliste <br />
+        <code>"m9na4"</code> : M9NA.4 Nettapotek resept <br /><br />
+
+        <code>"fk"</code> : felleskomponent1<br />
+        <code>"bas"</code> : Base64Container <br /><br />
+
+        Navnet på noden brukes til å angi tagen som skal befinne seg i meldingen. Innholdet i tagen spesifises i innholdet i noden.<br />
+        I eksempel 2 over angis det at tagen <code>&ltRegistrertEndring&gt</code> skal finnes i namespacet for M27.2, og at innholdet i den skal være "true". <br />
+        NB! Dersom man lar innholdet i noden være tom, vil man ikke sjekke mot innholdet, kun at noden finnes.<br /><br />
+
+        For innholdet i tager kan man også hente fram verdier dynamisk, dvs verdier som er lagret i tidligere step i testcasen. <br />
+        Dette gjøres ved å angi prosenttegn rundt teksten. Eks: %lagretID%<br />
+        Se eksempel 3, her skal vi hente fram en msgid som er lagret i et tidligere step der vi sendte inn en M1. Vi forventer her å finne denne msgid i M9.2. <br /><br />
+
+        Attributter kan også legges til for et kriterie.<br />
+        I eksempel 4 angis det at tagen <code>&ltMsgType&gt</code> skal finnes i namespacet for AppRec, og skal innholde V- og DN-attributtene som angitt. <br />
+        (Namespace-attributten spesialbehandles og vil fjernes fra selve søket.) <br />
+        Dersom tagen i meldingen inneholder flere attributter enn angitt, vil ikke testen feile av den grunn. <br />
+        Dersom man kun ønsker å teste at en attributt finnes, men ikke har noen krav til innholdet, spesifiser man det med en stjerne. Eks: <code>V="*"</code>. <br />
+
+        <h6>Spesialattributter</h6>
+        <code>notexist="true"</code> : Dette attributten kan angis dersom man ønsker at en tag (med evt innhold og attributter) IKKE skal finnes i meldingen. <br />
+        I eksempel 2 spesifiseres det at tagen <code>&ltTelecom&gt</code> ikke skal finnes i namespacet for MsgHead.<br /><br />
+
+        <code>count="x"</code> : Dette attributten kan angis dersom man ønsker at det skal finnes et visst antall forekomster av en tag i meldingen. <br />
+        F.eks count = "10" vi angi at det skal være 10 stk forekomster i meldingen. Dette kan f.eks brukes for å teste at man mottar 10 stk referansenummer i M4.2.<br />
+        NB! En test mot antall tags vil ikke kunne kombineres med andre attributter og innhold i tagene, det vil kun testes mot antall tags dersom count er spesifisert.<br /><br />
+
+        <code>parentnode="a"</code> : Dersom man oppgir spesialattributten 'parentnode' kan man angi at to eller flere kriterier skal inngå i samme node (dvs de har samme parentnode). <br />
+        Da angir man et tilfeldig valgt navn for hver parentnode, f.eks 'a'. NB! Ved bruk av flere kriterier med ulike parentnoder (a og b) må disse komme<br />
+        gruppert i testcasen: f.eks a, a, b, b. <br /><br />
+    </p>
+
+
+</body>
+</html>
