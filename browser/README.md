@@ -1,6 +1,7 @@
 # HTML page showing SFM portal integration
 The SFM browser-integration is expemplified in the *microEPJ* HMTL file with SFM-iframe and javascript setup for communication between iframe (SFM client) and host page.
 Just download the HTML file to your computer and open it. No serverside on this "EPJ"
+Favicon file will present a logo for the page in browser tabs. Nice when I have a lot of tabs up. Just download to same location as the HTML.
 
 Norwegian:
 MicroEpj har ytre (EPJ) ramme og kan vise portalene i iframe, og viser meldingene som går mellom EPJ og SFM.
