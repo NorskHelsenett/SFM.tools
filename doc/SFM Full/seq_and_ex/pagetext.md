@@ -40,7 +40,7 @@ Below is an example of an HTTP POST request that creates a session.
 
 
 
-![code example for session/create request] (https://github.com/NorskHelsenett/SFM.tools/blob/main/doc/SFM%20Full/seq_and_ex/sfm_full_source_tokenreq.png)
+![code example for session/create request](https://github.com/NorskHelsenett/SFM.tools/blob/main/doc/SFM%20Full/seq_and_ex/sfm_full_source_tokenreq.png)
 
 The response to this call will contain the newly created session in the following format (example):
 
@@ -193,5 +193,120 @@ When login is peformed by the browser, the code from session response and the pl
 
  
 ![Generate nonce example ] (https://github.com/NorskHelsenett/SFM.tools/blob/main/doc/SFM%20Full/seq_and_ex/sfm_full_source_nonce.png)
+
+# A detailed walkthroug
+
+This is a walkthroug of the normal sequence for a practitioner to open a pateient window in SFM.
+
+EPJ/EHR creates a ´nonce´ in two variants:
+
+1: Base64 encoded version used in login message to iframe:
+
+        qkhV08YwfJFk97VB3XP1t6WaZ2OaTMs8Y98HxGJgoHu9VGTrwN6R9te57JeOidhszqgOMpnCv5O6+X+F/8hWpA==
+
+2: Sha512 AND Base64 encoded version presented i session api for session/Create:
+
+        sqGnrWdjgWN2COtLrXMYu9+xER5P9r4+UbepqyQh0gJThofaSXan2djVtnMGuLVHgrx+mOFdeCrtbQykEwR2rw==
+
+EPJ retrieves token for the Practitioner:
+
+´´´                eyJhbGciOiJSUzI1NiIsImtpZCI6IkI0Q0FFNDUyQzhCNkE4OTNCNkE4NDBBQzhDODRGQjA3MEE0MjZFNDEiLCJ4NXQiOiJ0TXJrVXNpMnFKTzJxRUNzaklUN0J3cENia0UiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2hlbHNlaWQtc3RzLnRlc3QubmhuLm5vIiwibmJmIjoxNjY5MzYzMTU2LCJpYXQiOjE2NjkzNjMxNTYsImV4cCI6MTY2OTM2Njc1NiwiYXVkIjoiZS1oZWxzZTpzZm0uYXBpIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsImhlbHNlaWQ6Ly9zY29wZXMvaWRlbnRpdHkvcGlkIiwiaGVsc2VpZDovL3Njb3Blcy9pZGVudGl0eS9zZWN1cml0eV9sZXZlbCIsImhlbHNlaWQ6Ly9zY29wZXMvaHByL2hwcl9udW1iZXIiLCJoZWxzZWlkOi8vc2NvcGVzL2lkZW50aXR5L2Fzc3VyYW5jZV9sZXZlbCIsImUtaGVsc2U6c2ZtLmFwaS9zZm0uYXBpIl0sImFtciI6WyJwd2QiXSwiY2xpZW50X2lkIjoiZGYzNTRiODAtOTY0ZS00M2MyLTgxMTYtNTk1ZGE0OTVmZDExIiwiaGVsc2VpZDovL2NsYWltcy9jbGllbnQva2ovb3JnbnIiOiIxMDAxMDAxMjYiLCJoZWxzZWlkOi8vY2xhaW1zL2NsaWVudC9lYy9vcmducl9wYXJlbnQiOiIxMDAxMDAxMjYiLCJoZWxzZWlkOi8vY2xhaW1zL2NsaWVudC9lYy9leHAiOjE5MjQ5OTIwMDAsImhlbHNlaWQ6Ly9jbGFpbXMvY2xpZW50L2VjL2NvbW1vbl9uYW1lIjoiw5hzdG1hcmthIExlZ2Vrb250b3IiLCJjbGllbnRfYW1yIjoicHJpdmF0ZV9rZXlfand0IiwiaGVsc2VpZDovL2NsYWltcy9jbGllbnQvY2xhaW1zL29yZ25yX3BhcmVudCI6IjEwMDEwMDEyNiIsImF1dGhfdGltZSI6MTY2OTM2MzE1NiwiaWRwIjoidGVzdGlkcC1vaWRjIiwiaGVsc2VpZDovL2NsYWltcy9pZGVudGl0eS9waWQiOiIxNzA1NjYwMDU3NCIsImhlbHNlaWQ6Ly9jbGFpbXMvaWRlbnRpdHkvc2VjdXJpdHlfbGV2ZWwiOiI0IiwiaGVsc2VpZDovL2NsYWltcy9pZGVudGl0eS9hc3N1cmFuY2VfbGV2ZWwiOiJoaWdoIiwiaGVsc2VpZDovL2NsYWltcy9ocHIvaHByX251bWJlciI6IjQzMTAwMTExMCIsImhlbHNlaWQ6Ly9jbGFpbXMvY2xpZW50L2FtciI6InJzYV9wcml2YXRlX2tleSIsImUtaGVsc2U6c2ZtLmFwaS9jbGllbnQvY2xhaW1zL3NmbS1pZCI6ImRmMzU0YjgwLTk2NGUtNDNjMi04MTE2LTU5NWRhNDk1ZmQxMSIsInN1YiI6InA3Z3MvaElYckhrNUhlK2RxN1hUd0EyT21WdEJOU0plclZWL01OME5FVms9Iiwic2lkIjoiOEU3QUQ3NjM2QUJEMDA2NzUyNjlERTc2QjhGNDA3RDkifQ.Si2MRsJD6islsLWSZNeJeVsIwNguPYDCSRYH64cP8QeR8JiEjh_b_bla6AJaT30PISyzjkKJXIzI_okeguCkre3b0y78aUy-cZzum3BlKFd7ij_Cuf3OeO-x7moi8wH1e1TGi98PScWIY0vZsalfHK-WcO43RUrP8YwcyrTVEBjP8o8ClRYRCG_Bs0nw2gRYIKDXRs2DpFh0budp4UKRqw3St_srSRe4JZ3sZUswSROoYChPxNEyAZS3d7gIgoQhaqF2mwl_qz2se88_z7PCdYGGqLFMVil50TGzVTz2mYx_UFl7aHfFTDE2RIX6yMiHohmGdJm7R1zt98LvWVLwaQ
+´´ 
+
+
+EPJ performs session/Create to SFM:
+
+https://session.test2.forskrivning.no/api/Session/create
+
+´´´
+Content-Type : application/json
+Autorization : Bearer ey....
+
+POST Request body
+{
+    "nonce" : "sqGnrWdjgWN2COtLrXMYu9+xER5P9r4+UbepqyQh0gJThofaSXan2djVtnMGuLVHgrx+mOFdeCrtbQykEwR2rw=="
+} 
+´´´
+Repsonse body
+´´´
+{
+    "id": "aJBdvkk5j3wW7utUfqmQDwRMCVIRVsFDxK7jHXZo8JabFahppgKxHo7DoLHJgHLAQH12YG7SamXdCtELicb3UQ==",
+    "code": "haORVSl6uxbB7HjEj/4lByfMNZMEbxibGz/NMwZoSTe7VDAHsvi/04/aNptXulq+OXuHg7SrpjN2h8J8RJ65tg==",
+    "clientAddress": "https://client.test2.forskrivning.no/v30",
+    "apiAddress": "https://server.test2.forskrivning.no/v30",
+    "metadata": {
+        "displayportal": "https://display-portal.test2.forskrivning.no/v30",
+        "patientportal": "https://client.test2.forskrivning.no/v30",
+        "enterpriseportal": "https://enterprise-portal.test2.forskrivning.no/v30",
+        "healthcareportal": "https://health-personnel-portal.test2.forskrivning.no/v30"
+    }
+}
+´´´
+
+EPJ opens web-window with SFM “Patientportal” in iframe:
+
+        <iframe id="sfm_iframe" src="https://client.test2.forskrivning.no/v30/" width="100%" height="800px">
+
+Parent frame listens to event “message” from the iframe: window.addEventListener("message", dispayMessage, false);
+
+Message received when SFM client is loaded and ready: {"clientLoaded":"success"}
+
+EPJ is now ready to login the Practitioner, using the “plain” nonce and the code from session/Create response.
+
+Using postMessage on the iframe.contentWindow:
+
+´´´jason
+{"action":"login","code":"haORVSl6uxbB7HjEj/4lByfMNZMEbxibGz/NMwZoSTe7VDAHsvi/04/aNptXulq+OXuHg7SrpjN2h8J8RJ65tg==","nonce":"qkhV08YwfJFk97VB3XP1t6WaZ2OaTMs8Y98HxGJgoHu9VGTrwN6R9te57JeOidhszqgOMpnCv5O6+X+F/8hWpA==","apiEndpoint":"https://server.test2.forskrivning.no/v30"}
+´´´
+
+EPJ receives:
+
+        {"login":"success"}
+
+EPJ is now ready to select patient. Patient ticket is obtained in API by presenting known identifier for the patient:
+
+https://session.test2.forskrivning.no/api/PatientTicket
+
+´´´
+Content-Type : application/json
+Autorization : Bearer ey....
+
+POST Request body
+{
+    "patientPid" : "10086148248"
+}
+´´´
+
+Repsonse: 
+´"b0968242-4df2-47cc-b3b9-2040d3886c46"´
+
+The response header contains Expires indicating lifetime of the ticket)
+
+Note: By adding Request header: Accept : application/json the response body will appear as JSON : { "patientTicket" : "b0968242-4df2-47cc-b3b9-2040d3886c46" } 
+
+EPJ may now select the patient to show in the portal by postMessage to iframe:
+
+        {"action":"setPatient","ticket":"b0968242-4df2-47cc-b3b9-2040d3886c46","showAllergies":true,"onBehalfOf":""}
+
+EPJ receives:
+
+        {"setPatient":"success"}
+
+EPJ now shows the patient medication in the iframe!
+
+## Display-portal (AKA: widget)
+The Display portal is slightly different in tree ways:
+
+it is possible to create a session for display portal with a token without the “identity” part. The EPJ must provide information (PID) for the user requiring the portal. See example below.
+
+ The display portal needs two boolean values for controlling the appearence of Allergies and medications: 
+
+        {"action":"setPatient","ticket":"3f682b1c-e54e-4693-929d-20698935d9a5","showAllergies":true,"showLib":true,"onBehalfOf":""} 
+
+Excess parameters are ignored, the above format works for all “setPatient” messages.
+
+The portal redirects to outer window 
+
+HelseID token with EPJ claim for user identification:
 
 
