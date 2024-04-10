@@ -24,13 +24,13 @@ After having received a valid ´access_token´ a call needs to be made to the SF
 
 Below is an example of an HTTP POST request that creates a session.
 
-  POST {{SfmSessionGatewayEndpoint}}/api/Session/create
-  Authorization: Bearer {{access_token}}
-  ContentType: application/json
-  
-  {
-    "nonce": "{{nonceHashBase64}}"
-  }
+    POST {{SfmSessionGatewayEndpoint}}/api/Session/create
+    Authorization: Bearer {{access_token}}
+    ContentType: application/json
+    
+    {
+      "nonce": "{{nonceHashBase64}}"
+    }
 
 | Variable      | Meaning |  
 | :---        |    :----:   |     
