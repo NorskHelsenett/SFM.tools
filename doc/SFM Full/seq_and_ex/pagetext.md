@@ -192,7 +192,7 @@ When login is peformed by the browser, the code from session response and the pl
  The nonce is a random number generated and converted to Base64 that will then need to be hashed. In the example below this is a 64 byte array.
 
  
-![Generate nonce example ] (https://github.com/NorskHelsenett/SFM.tools/blob/main/doc/SFM%20Full/seq_and_ex/sfm_full_source_nonce.png)
+![Generate nonce example](https://github.com/NorskHelsenett/SFM.tools/blob/main/doc/SFM%20Full/seq_and_ex/sfm_full_source_nonce.png)
 
 # A detailed walkthroug
 
