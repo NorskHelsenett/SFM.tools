@@ -29,9 +29,39 @@ Det er noen viktige ting å være klar over:
 - SFM fullversjon med GUI klient må oppfriskes med nytt token når EPJ har gjort refresh. Dette gjøres i API Datadeling med endepunktet: ```/api/Session/refresh```  
 - På samme måte skal sesjonen lukkes dersom brukeren logger av EPJ systemet: ```/api/Session/end```.
 
-> SFM har en sesjon for hver bruker i en virksomhet. Dette er slik for å unngå at det skal hope seg opp med sesjoner når bruker hopper mellom maskiner. Sesjon er her en knytting mellom accesstoken og cookie. En bruker kan ta create session fra mange maskiner og det fungerer for bruker i alle browsere fram til han på en av maskinene velger å logge ut. Da er det krav om å avslutte sesjon og EPJ sender avslutt sesjon. Når bruker kommer til en av de andre maskinene som bruker sesjonen, så finnes ikke cookie og kall fra SFM feiler. EPJ må da ta en ny create session og starte browser igjen for at bruker skal kunne fortsette å jobbe på pasienten. 
+> SFM har en sesjon for hver bruker i en virksomhet. Dette er slik for å unngå at det skal hope seg opp med sesjoner når bruker hopper mellom maskiner. Sesjon er her en knytting mellom accesstoken og cookie. En bruker kan ta create session fra mange maskiner og det fungerer for bruker i alle browsere fram til han på en av maskinene velger å logge ut. Da er det krav om å avslutte sesjon og EPJ sender avslutt sesjon. Når bruker kommer til en av de andre maskinene som bruker sesjonen, så finnes ikke cookie og kall fra SFM feiler. EPJ må da ta en ny create session og starte browser igjen for at bruker skal kunne fortsette å jobbe på pasienten.
+
+## Eksempel på request for multi tenant klient
+
+    "authorization_details": [
+        {
+          "type": "helseid_authorization",
+          "practitioner_role": {
+            "organization": {
+              "identifier": {
+                "system": "urn:oid:1.0.6523",
+                "type": "ENH",
+                "value": "NO:ORGNR:100100126:999944582"
+              }
+            }    
+          }
+        },
+        {
+          "type": "nhn:sfm:journal-id",
+          "value": {
+            "journal_id": "7fbfbcbd-6f08-4e95-9f7a-9d69c40f6a35"
+          }
+        }
+     ]
+I eksempelet over er det angitt hvilke to organisasjonsnummer (toppnivå/parent og virksomhet/child) som skal angis i token, samt at journal-id angis for korrekt instans av SFM. Det kan være flere journal-id som peker på samme instans, f.eks. en pr juridisk enhet. 
+Det er EPJ systemet sitt ansvar å ikke samle data om pasienter for flere virksomheter når det ikke foreligger juridiske avtaler om journalsamarbeid. 
+
+Merk: der er detalj i JSON strukturen her: JSON variabelen “journal_id” har understrek, mens helseID scope har bindestrek. Dette er av tekniske grunner.
+
 
 For mer informasjon om HelseID:  https://www.nhn.no/helseid/hvordan-ta-i-bruk-helseid/
+
+Informasjon om journal-id: https://utviklerportal.nhn.no/informasjonstjenester/helseid/bruksmoenstre-og-eksempelkode/bruk-av-helseid/docs/tekniske-mekanisker/sfm-id_for_multi_tenant-klienter_no_nbmd/
 
 For utviklere: [How do I, as a developer, get started with HelseID](https://e-resept.atlassian.net/wiki/spaces/HELSEID/pages/217382951/How+do+I+as+a+developer+get+started+with+HelseID)
 
