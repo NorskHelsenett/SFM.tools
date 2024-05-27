@@ -1,0 +1,1468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (x64) (http://www.altova.com) by Atli Sturluson (Thula - Nordic Source Solutions) -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" 
+        xmlns:export="http://www.kith.no/xmlstds/eresept/forskrivningsmodul/export/2019-11-13" 
+        targetNamespace="http://www.kith.no/xmlstds/eresept/forskrivningsmodul/export/2019-11-13" elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+	<element name="PasientExport">
+		<annotation>
+			<documentation>Root element for a single patient</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="Id" type="string">
+					<annotation>
+						<documentation>Internal ID from FM (GUID)</documentation>
+					</annotation>
+				</element>
+				<element name="DemografiskInfo">
+					<complexType>
+						<sequence>
+							<element name="FamilyName" type="string" />
+							<element name="MiddleName" type="string" minOccurs="0"/>
+							<element name="GivenName" type="string" />
+							<element name="Sex" type="export:CS" minOccurs="0"/>
+              <element name="DateOfBirth" type="date" nillable="true" minOccurs="0"/>
+							<element name="Nationality" type="export:CS" minOccurs="0"/>
+							<element name="Ident" type="export:Ident" maxOccurs="unbounded"/>
+							<element name="Address" type="export:Address" minOccurs="0" maxOccurs="unbounded"/>
+							<element name="TeleCom" type="export:TeleCom" minOccurs="0" maxOccurs="unbounded"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Fastlege" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="HprId" type="string"/>
+							<element name="Navn" type="string" minOccurs="0"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="MultidoseAnsvarligLege" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="HprId" type="string"/>
+							<element name="Navn" type="string" minOccurs="0"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="PLOInformasjon" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="HerId" type="string"/>
+							<element name="Navn" type="string" minOccurs="0"/>
+							<element name="Kommune" type="string" minOccurs="0"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Meldinger" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Melding" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+                    <element name="Id" type="string"/>
+                    <element name="ParentId" type="string" minOccurs="0"/>
+                    <element name="Korrespondance" type="boolean" />
+                    <element name="State" type="string" >
+                      <annotation>
+                        <documentation>Successful or Failed</documentation>
+                      </annotation>
+                    </element>
+										<element name="MsgId" type="string"/>
+										<element name="Type" type="export:CS"/>
+										<element name="GenDate" type="dateTime"/>
+										<element name="MeldingsFil" type="string">
+											<annotation>
+												<documentation>Relative path to message file on disk</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Legemiddelreaksjon" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="GruppeId" type="string"/>
+							<element name="Id" type="string"/>
+							<element name="HeadOfHistory" type="boolean"/>
+							<element ref="export:CAVE"/>
+							<element name="SistOppdatertDato" type="date"/>
+							<element name="RegistrertAv" type="string" minOccurs="0"/>
+							<element name="AvkreftetKommentar" type="string" minOccurs="0"/>
+							<element name="Discarded" type="boolean" minOccurs="0"/>
+							<element name="Deleted" minOccurs="0">
+								<complexType>
+									<sequence>
+										<element name="Reason" type="export:CS">
+											<annotation>
+												<documentation>Kodeverk 9237</documentation>
+											</annotation>
+										</element>
+										<element name="DeletedBy" type="string"/>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Behandlinger" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Legemiddelbehandling" minOccurs="0" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="LibId" type="string"/>
+										<element name="DatoOppstart" type="date"/>
+                    <element name="LokalKommentar" minOccurs="0" maxOccurs="unbounded">
+											<complexType>
+												<sequence>
+													<element name="Aktiv" type="boolean"/>
+													<element name="Dato" type="dateTime"/>
+                          <element name="BrukerId" minOccurs="0" type="string"/>
+													<element name="Kommentar" type="string"/>
+													<element name="Slettet" minOccurs="0">
+														<complexType>
+															<sequence>
+																<element name="Dato" type="dateTime"/>
+                                <element name="BrukerId" minOccurs="0" type="string"/>
+															</sequence>
+														</complexType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+										<element ref="export:Prescription" maxOccurs="unbounded"/>
+										<element name="PrescriptionDetails">
+											<complexType>
+												<sequence>
+													<element ref="export:LegemiddelForskrivningsInfo" maxOccurs="unbounded"/>
+												</sequence>
+											</complexType>
+										</element>
+                    <element ref="export:Utlevering" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="export:SlvSvar" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="InteraksjonHandtert" minOccurs="0">
+											<complexType>
+												<sequence>
+													<element name="Aktiv" type="boolean"/>
+													<element name="Begrunnelse" type="string" minOccurs="0"/>
+													<element name="Tidspunkt" type="dateTime"/>
+													<element name="BrukerId" type="string"/>
+												</sequence>
+											</complexType>
+										</element>
+                    <element name="Sporsmal" minOccurs="0" maxOccurs="unbounded">
+                      <complexType>
+                        <sequence>
+                          <element name="Kode" type="export:CV"/>
+                          <element name="Merknad" type="string" minOccurs="0"/>
+                          <element name="Tidspunkt" type="dateTime"/>
+                          <element name="Stiller" type="string"/>
+                          <element name="Mottaker" type="string" minOccurs="0"/>
+                          <element name="Svar" minOccurs="0" maxOccurs="unbounded">
+                            <complexType>
+                              <sequence>
+                                <element name="Kode" type="export:CV"/>
+                                <element name="Merknad" type="string" minOccurs="0"/>
+                                <element name="Tidspunkt" type="dateTime"/>
+                              </sequence>
+                            </complexType>
+                          </element>
+                        </sequence>
+                      </complexType>
+                    </element>
+                  </sequence>
+								</complexType>
+							</element>
+							<element name="NIBBehandling" minOccurs="0" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="LibId" type="string"/>
+										<element name="DatoOppstart" type="date"/>
+										<element ref="export:Seponering" minOccurs="0"/>
+										<element ref="export:Prescription" maxOccurs="unbounded"/>
+										<element name="PrescriptionDetails">
+											<complexType>
+												<sequence>
+													<element ref="export:HandelsvareForskrivningsInfo" maxOccurs="unbounded"/>
+												</sequence>
+											</complexType>
+										</element>
+                    <element ref="export:Utlevering" minOccurs="0" maxOccurs="unbounded"/>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="FIBBehandling" minOccurs="0" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="LibId" type="string"/>
+										<element name="DatoOppstart" type="date"/>
+										<element ref="export:Seponering" minOccurs="0"/>
+										<element ref="export:Prescription" maxOccurs="unbounded"/>
+										<element name="PrescriptionDetails">
+											<complexType>
+												<sequence>
+													<element ref="export:HandelsvareForskrivningsInfo" maxOccurs="unbounded"/>
+												</sequence>
+											</complexType>
+										</element>
+                    <element ref="export:Utlevering" minOccurs="0" maxOccurs="unbounded"/>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="VaksineBehandling" minOccurs="0" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="LibId" type="string"/>
+										<element name="DatoOppstart" type="date"/>
+										<element ref="export:Prescription" maxOccurs="unbounded"/>
+										<element name="PrescriptionDetails">
+											<complexType>
+												<sequence>
+													<element ref="export:LegemiddelForskrivningsInfo" maxOccurs="unbounded"/>
+												</sequence>
+											</complexType>
+										</element>
+                    <element ref="export:Utlevering" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="export:SlvSvar" minOccurs="0" maxOccurs="unbounded"/>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="EkspederingsAnmodningKommentar" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="Kommentar" type="string"/>
+							<element name="IsDefault" type="boolean"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Legemiddelgjennomgang" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="DatoNestePlanlagt" type="date" minOccurs="0"/>
+							<element name="EkskluderPasient" type="boolean" minOccurs="0"/>
+							<element name="RegistrertLegemiddelgjennomgang" minOccurs="0" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="Dato" type="dateTime"/>
+										<element name="BrukerId" type="string"/>
+										<element name="Kommentar" type="string" minOccurs="0"/>
+										<element name="Kilde" type="export:CS" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="M251MessageId" type="string"/>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="HelfoSoknader" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Soknad" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+                    <element name="LegemiddelType" type="string">
+                      <annotation>
+                        <documentation>
+                          Product, Brand, FreeText or Preparation
+                        </documentation>
+                      </annotation>
+                    </element>
+										<element name="LegemiddelId" type="string"/>
+										<element name="Sendt" type="dateTime"/>
+										<element name="LegeHpr" type="string" minOccurs="0"/>
+										<element name="SokerNavn" type="string" minOccurs="0"/>
+                    <element name="SoknadKladd" type="boolean" minOccurs="0"/>
+										<element name="M2MeldingsId" type="string" minOccurs="0"/>
+										<element name="Svar" minOccurs="0" maxOccurs="unbounded">
+											<complexType>
+												<sequence>
+													<element name="M12MeldingsId" type="string" minOccurs="0"/>
+													<element name="Tidspunkt" type="int"/>
+													<element name="Beslutning" type="export:CS"/>
+                          <element name="Avslagsgrunn" type="export:CS" minOccurs="0" />
+													<element name="Begrunnelse" type="string" minOccurs="0"/>
+                          <element name="Vedtaksdato" type="date"/>
+													<element name="GyldigTil" type="date" minOccurs="0"/>
+												</sequence>
+											</complexType>
+										</element>
+										<element name="RefHjemmel" type="export:CV" minOccurs="0"/>
+										<element name="RefKode" type="export:CV" minOccurs="0"/>
+										<element name="Slettet" minOccurs="0">
+											<complexType>
+												<sequence>
+													<element name="Tidspunkt" type="dateTime"/>
+													<element name="BrukerId" type="string"/>
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="UstrukturertHistorikk" type="string" minOccurs="0"/>
+				<element name="HandterteInteraksjoner" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="HandertInteraksjon" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="LibId1" type="string"/>
+										<element name="LibId2" type="string"/>
+										<element name="FestInteraksjonsId" type="string"/>
+										<element name="Aktiv" type="boolean"/>
+										<element name="Begrunnelse" type="string" minOccurs="0"/>
+										<element name="Tidspunkt" type="dateTime"/>
+										<element name="BrukerId" type="string"/>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="VibGodkjenninger" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="VibGodkjenning" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="BrukerId" type="string"/>
+										<element name="Tidspunkt" type="dateTime"/>
+                    <element name="TypeGodkjenning" type="string">
+                      <annotation>
+                        <documentation>
+                          Admission
+                          PreliminaryAdmission
+                          Discharge
+                          AfterChange
+                          Other
+                        </documentation>
+                      </annotation>
+                    </element>
+										<element name="Kommentar" type="string" minOccurs="0"/>
+										<element name="AnnenInformasjon" type="string" minOccurs="0"/>
+										<element name="InstitusjonId" type="string" minOccurs="0"/>
+										<element name="M251DokumentId" type="string" minOccurs="0"/>
+										<element name="Kilde" type="export:CS" minOccurs="0" maxOccurs="unbounded"/>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="ForskrivningsInfo">
+		<sequence>
+			<element name="Id" type="string"/>
+			<element name="Forskrivningsdato" type="date" minOccurs="0"/>
+			<element name="ForskrivningsType" type="export:CS">
+				<annotation>
+					<documentation>eRp/uRp (not yet sent or printed)
+eRp (e-resept)
+uRp (printed)
+fRp (fax)
+tRp (telephone)
+Reg (local registration)
+iRp (imported)</documentation>
+				</annotation>
+			</element>
+			<element name="Utloper" type="date" minOccurs="0"/>
+			<element name="Vernepliktig" type="boolean" minOccurs="0"/>
+			<element name="SoktIndividRefusjon" type="boolean" minOccurs="0"/>
+			<element name="Frikort" type="boolean" minOccurs="0"/>
+			<element name="Vergeinnsynsreservasjon" type="boolean" minOccurs="0"/>
+			<element name="TilEgenPraksis" type="boolean" minOccurs="0"/>
+			<element name="RekvLegensNavn" type="boolean" minOccurs="0"/>
+			<element name="RefNr" type="string" minOccurs="0"/>
+			<element name="Spesialitet" type="export:CV" minOccurs="0"/>
+			<element ref="export:EkspAnm" minOccurs="0"/>
+			<element name="OppdatertFest" type="dateTime" minOccurs="0"/>
+			<element name="TidligsteUtlevering" type="date" minOccurs="0"/>
+			<element name="UtskrevetSykehus" type="boolean" minOccurs="0"/>
+			<element name="LastResept" type="boolean" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<element name="LegemiddelForskrivningsInfo">
+		<complexType>
+			<complexContent>
+				<extension base="export:ForskrivningsInfo">
+					<sequence>
+						<element ref="export:Indikasjon" minOccurs="0"/>
+						<element ref="export:ReseptDokLegemiddel"/>
+						<element name="AkInformasjon" minOccurs="0">
+							<complexType>
+								<sequence>
+									<element name="Inr" type="decimal" nillable="true" minOccurs="0"/>
+									<element name="DatoInrKontroll" type="date" nillable="true" minOccurs="0"/>
+									<element name="InrMinimum" type="decimal"/>
+									<element name="InrMaximum" type="decimal"/>
+									<element name="DatoNesteInrKontroll" type="date" nillable="true" minOccurs="0"/>
+									<element name="Kommentar" type="string" minOccurs="0"/>
+									<element name="DatoDosekontroll" type="date" />
+								</sequence>
+							</complexType>
+						</element>
+						<element name="ForholdsregelVedInntak" type="string" minOccurs="0"/>
+						<element name="BegrunnelseReservasjonGeneriskBytte" type="string" minOccurs="0"/>
+						<element name="BegrunnelseCaveOverstyring" type="string" minOccurs="0"/>
+						<element name="ReasonForChange" type="string" minOccurs="0"/>
+						<element name="ConfirmedIsNotFertile" type="boolean" minOccurs="0"/>
+            <element name="PreparationId" type="string" minOccurs="0"/>
+            <element name="FreeetextMedicationId" type="string" minOccurs="0"/>
+            <element name="DeliveryMode" type="string">
+              <annotation>
+                <documentation>
+                  Undefined
+                  Dosett
+                  Multidose
+                  NeitherPlo
+                  NeitherPatient
+                </documentation>
+              </annotation>
+            </element>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="HandelsvareForskrivningsInfo">
+		<complexType>
+			<complexContent>
+				<extension base="export:ForskrivningsInfo">
+					<sequence>
+						<element ref="export:ReseptDokHandelsvare"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="Indikasjon">
+		<complexType>
+			<sequence>
+				<element name="Indikasjon" type="string" minOccurs="0"/>
+				<element name="Diagnose" type="export:CV" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="ExportImport">
+		<annotation>
+			<documentation>Root element for data not related to a patient</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="Brukere">
+					<complexType>
+						<sequence>
+							<element name="Helseperson" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="Id" type="string"/>
+										<element name="Brukernavn" type="string"/>
+										<element name="Brukertype" type="string"/>
+										<element name="Aktiv" type="boolean"/>
+										<element name="FamilyName" type="string" minOccurs="0"/>
+										<element name="MiddleName" type="string" minOccurs="0"/>
+										<element name="GivenName" type="string" minOccurs="0"/>
+										<element name="DateOfBirth" type="date" minOccurs="0"/>
+										<element name="Nationality" type="export:CS" minOccurs="0"/>
+										<element name="Ident" type="export:Ident" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="Address" type="export:Address" minOccurs="0"/>
+										<element name="TeleCom" type="export:TeleCom" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="TypeHealthcareProfessional" type="export:CS" minOccurs="0"/>
+										<element name="Spesialitet" type="export:CS" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="BrukICPC" type="boolean" minOccurs="0"/>
+										<element name="HarForskrivningsrett" type="boolean" minOccurs="0"/>
+                    <element name="ForskrivningsrettAB" type="string" minOccurs="0">
+                      <annotation>
+                        <documentation>
+                          All
+                          NotA
+                          NotAB
+                        </documentation>
+                      </annotation>
+                    </element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Institusjon" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="Id" type="string"/>
+							<element name="Navn" type="string"/>
+							<element name="Ident" type="export:Ident" maxOccurs="unbounded"/>
+							<element name="Address" type="export:Address" minOccurs="0"/>
+							<element name="TeleCom" type="export:TeleCom" minOccurs="0" maxOccurs="unbounded"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="ForskrivningsMaler" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Mal" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="Id" type="string"/>
+										<element name="Navn" type="string"/>
+										<choice minOccurs="0">
+											<element name="BrukerId" type="string"/>
+											<element name="InstitusjonsId" type="string"/>
+										</choice>
+										<element name="ForskrivningsType" type="string">
+											<annotation>
+												<documentation>eRp/uRp (not yet sent or printed)
+												eRp (e-resept)
+												uRp (printed)
+												fRp (fax)
+												tRp (telephone)
+												Reg (local registration)
+												iRp (imported)</documentation>
+											</annotation>
+										</element>
+										<element name="SoktIndividRefusjon" type="boolean" minOccurs="0"/>
+										<element name="Vergeinnsynsreservasjon" type="boolean" minOccurs="0"/>
+										<element name="TilEgenPraksis" type="boolean" minOccurs="0"/>
+										<element name="RekvLegensNavn" type="boolean" minOccurs="0"/>
+										<element name="RefNr" type="string" minOccurs="0"/>
+										<element name="OppdatertFest" type="dateTime"/>
+										<element name="LastResept" type="boolean" minOccurs="0"/>
+										<element ref="export:Indikasjon" minOccurs="0"/>
+										<choice minOccurs="0">
+											<element ref="export:ReseptDokLegemiddel"/>
+											<element ref="export:ReseptDokHandelsvare"/>
+										</choice>
+										<element name="ForholdsregelVedInntak" type="string" minOccurs="0"/>
+										<element name="BegrunnelseReservasjonGeneriskBytte" type="string" minOccurs="0"/>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Rapporter" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Rapport" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="Id" type="string"/>
+										<element name="Titel" type="string"/>
+										<element name="BrukerId" type="string"/>
+										<element name="PasientId" type="string" minOccurs="0"/>
+										<element name="InstitusjonsId" type="string" minOccurs="0"/>
+										<element name="Tidspunkt" type="dateTime"/>
+										<element name="RapportFil" type="string"/>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Protokoller" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Protokoll" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="Id" type="string"/>
+										<element name="Name" type="string"/>
+										<element name="Description" type="string"/>
+										<element name="Created" type="dateTime"/>
+										<choice minOccurs="0">
+											<element name="BrukerId" type="string"/>
+											<element name="InstitusjonsId" type="string"/>
+										</choice>
+										<element name="Diagnosekode" type="export:CV"/>
+										<element name="Behandlingsfase" type="export:CV"/>
+										<element name="Oppmerksomhet" type="export:CV"/>
+										<element name="DoseresEtter" type="export:CS"/>
+										<element name="OvreGrense" type="decimal" minOccurs="0"/>
+										<element name="NedreGrense" type="decimal" minOccurs="0"/>
+										<element name="Enhet" type="export:CV" minOccurs="0"/>
+										<element name="Maler" maxOccurs="unbounded">
+											<complexType>
+												<sequence>
+													<element name="MalId" type="string"/>
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="LokaltLegemiddel" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="Id" type="string"/>
+							<element ref="export:LokalVare"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="LokaltMagistreltLegemiddel" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="Id" type="string"/>
+              <element name="DatoOpprettet" type="dateTime" />
+							<element ref="export:Legemiddelblanding"/>
+				      <element name="Aktiv" type="boolean"/>
+              <choice minOccurs="0">
+                  <element name="BrukerId" type="string"/>
+                  <element name="InstitusjonsId" type="string"/>
+              </choice>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="LokaltKosttilskudd" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="Id" type="string"/>
+							<element ref="export:LokalVare"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Inboks" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Melding" minOccurs="0" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="Id" type="string"/>
+										<element name="LegeBrukerId" type="string"/>
+										<element name="Sender" type="string"/>
+										<element name="MeldingsType" type="export:CS"/>
+										<element name="Tidspunkt" type="dateTime"/>
+										<element name="PasientId" type="string" minOccurs="0"/>
+										<element name="PrescriptionId" type="string" minOccurs="0"/>
+										<element name="DokumentId" type="string" minOccurs="0"/>
+										<element name="Melding" type="string" minOccurs="0"/>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="Address">
+		<sequence>
+			<element name="Type" type="export:CS" minOccurs="0"/>
+			<element name="StreetAdr" type="string" minOccurs="0"/>
+			<element name="PostalCode" type="string" minOccurs="0"/>
+			<element name="City" type="string" minOccurs="0"/>
+			<element name="Postbox" type="string" minOccurs="0"/>
+			<element name="County" type="export:CS" minOccurs="0"/>
+			<element name="Country" type="export:CS" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="TeleCom">
+		<annotation>
+			<documentation>
+         Inneholder opplysninger om telekommunikasjonsadresse, inklusive kommunikasjonstype. Denne klassen benyttes for å registrere telefonnummer, telefaks, personsøker etc., knyttes opp mot de registrerte adressene.
+      </documentation>
+		</annotation>
+		<sequence>
+			<element name="TypeTelecom" type="export:CS" minOccurs="0"/>
+			<element name="TeleAddress" type="export:URL"/>
+		</sequence>
+	</complexType>
+	<!-- Class: Identifikator -->
+	<complexType name="Ident">
+		<sequence>
+			<element name="Id" type="string"/>
+			<element name="TypeId" type="export:CV"/>
+		</sequence>
+	</complexType>
+	<!--Komplekse datatyper-->
+	<complexType name="CV">
+		<attribute name="V" type="token" use="required"/>
+		<attribute name="S" type="export:oid" use="required"/>
+		<attribute name="DN" type="string" use="required"/>
+		<attribute name="OT" type="string" use="optional"/>
+	</complexType>
+	<simpleType name="oid">
+		<restriction base="token"/>
+	</simpleType>
+	<complexType name="CS">
+		<attribute name="V" type="token" use="required"/>
+		<attribute name="DN" type="string" use="required"/>
+	</complexType>
+	<complexType name="TS">
+		<attribute name="V" type="string" use="required" />
+	</complexType>
+	<complexType name="URL">
+		<attribute name="V" type="anyURI" use="optional"/>
+	</complexType>
+	<element name="Patient">
+		<annotation>
+			<documentation>
+         Informasjon som er knyttet til rollen som pasient.   Alle elementer er frivilige, men navn eller Id (Ident) må alltid oppgis. Vanligvis oppgis både navn og Id.
+      </documentation>
+		</annotation>
+		<complexType>
+			<sequence/>
+		</complexType>
+	</element>
+	<element name="HealthcareProfessional">
+		<annotation>
+			<documentation>
+         For å beskrive egenskaper ved personen som helsepersonell.
+      </documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element name="RoleToPatient" type="export:CV" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<!-- LEVEL 5 -->
+	<!-- Class: Organisatorisk enhet (Organisation) -->
+	<element name="Organisation">
+		<annotation>
+			<documentation>
+         Denne klassen benyttes til å beskrive de organisatoriske enhetene som direkte eller indirekte er involvert i korrespondansen.   Hvis organisasjon oppgis som en hierarkisk struktur, skal høyste nivå av klassen tilsvare høyeste nivå i organisasjonen.
+      </documentation>
+		</annotation>
+		<complexType>
+			<sequence minOccurs="0"/>
+		</complexType>
+	</element>
+	<element name="CAVE">
+		<complexType>
+			<sequence>
+				<element name="CAVEId" type="string"/>
+				<element name="HjelpestoffReaksjon" type="boolean" nillable="true" minOccurs="0"/>
+				<element name="GrunnlagForCAVE" type="string" minOccurs="0"/>
+				<element name="RegisteringsDato" type="date"/>
+				<element name="Signatur" type="string"/>
+				<element name="Innaktiv" type="boolean" nillable="true" minOccurs="0"/>
+				<choice>
+					<element ref="export:LegemiddelMerkevare"/>
+					<element ref="export:Virkestoff"/>
+					<element ref="export:ATC"/>
+				</choice>
+				<element name="Reaksjon" type="export:CV" minOccurs="0"/>
+				<element name="Kilde" type="export:CV" minOccurs="0"/>
+				<element name="Alvorlighetsgrad" type="export:CS" minOccurs="0"/>
+				<!-- If Avkreftet is true then Sannsynlighet is null-->
+				<element name="Sannsynlighet" type="export:CV" minOccurs="0"/>
+				<element name="Avkreftet" type="boolean" nillable="true" minOccurs="0"/>
+				<element name="Oppdaget" minOccurs="0">
+					<complexType>
+						<choice>
+							<element name="Dato" type="date" nillable="true" minOccurs="0"/>
+							<element name="Alder" type="int" nillable="true" minOccurs="0"/>
+							<element name="IkkeOppgitt" type="boolean" nillable="true" minOccurs="0"/>
+							<element name="Ukjent" type="boolean" nillable="true" minOccurs="0"/>
+						</choice>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Virkestoff">
+		<complexType>
+			<sequence>
+				<element name="VirkestoffId" type="string" minOccurs="0"/>
+				<element name="VirkestoffNavn" type="string"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="LegemiddelMerkevare">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeLegemiddel">
+					<sequence>
+						<element name="LegemiddelId" type="string" minOccurs="0"/>
+						<element name="LegemiddelNavn" type="string"/>
+						<element ref="export:Virkestoff" minOccurs="0" maxOccurs="unbounded"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="ATC">
+		<complexType>
+			<sequence>
+				<element name="ATCKode" type="export:CV"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Legemiddelblanding">
+		<complexType>
+			<sequence>
+        <element name="Id" type="string" minOccurs="0"/>
+				<element name="Type" type="export:CV" minOccurs="0"/>
+				<element name="Navn" type="string"/>
+				<element name="TilbOppl" type="string" minOccurs="0"/>
+				<element name="Mengde" type="export:PQ"/>
+				<element name="Legemiddelform" type="export:CV"/>
+				<element name="BestanddelLegemiddel" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<complexContent>
+							<extension base="export:typeBestanddel">
+								<sequence>
+									<choice>
+                    <element name="FreeTextMedicationId" type="string" />
+                    <element ref="export:LegemiddelMerkevare"/>
+										<element ref="export:Legemiddelpakning"/>
+										<element ref="export:LegemiddelVirkestoff"/>
+									</choice>
+									<choice>
+										<element ref="export:Utblanding"/>
+										<element ref="export:MengdeBestanddel"/>
+									</choice>
+								</sequence>
+							</extension>
+						</complexContent>
+					</complexType>
+				</element>
+				<element name="BestanddelAnnet" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<complexContent>
+							<extension base="export:typeBestanddel">
+								<sequence>
+                  <element name="NavnFormStyrke" type="string"/>
+									<choice>
+										<element ref="export:Utblanding"/>
+										<element ref="export:MengdeBestanddel"/>
+										<element ref="export:Styrke"/>
+									</choice>
+								</sequence>
+							</extension>
+						</complexContent>
+					</complexType>
+				</element>
+				<element name="BestanddelVirkestoff" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element ref="export:Virkestoff"/>
+							<choice>
+								<element ref="export:Styrke"/>
+								<element ref="export:MengdeBestanddel"/>
+							</choice>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Styrke">
+		<complexType>
+			<sequence>
+				<element name="Teller" type="export:PQ">
+					<annotation>
+						<documentation>Styrke teller</documentation>
+					</annotation>
+				</element>
+				<element name="Nevner" type="export:PQ" minOccurs="0">
+					<annotation>
+						<documentation>Styrke nevner</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Utblanding">
+		<complexType>
+			<sequence>
+				<element name="Adqs" type="export:CS"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="MengdeBestanddel">
+		<complexType>
+			<sequence>
+				<element name="Mengde" type="export:PQ"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Legemiddelpakning">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeLegemiddel">
+					<sequence>
+						<element name="Id" type="string" minOccurs="0"/>
+						<element name="Varenr" type="string"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<complexType name="typeBestanddel"/>
+	<complexType name="PQ">
+		<attribute name="V" type="double" use="required"/>
+		<attribute name="U" type="token" use="required"/>
+	</complexType>
+	<element name="LegemiddelVirkestoff">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeLegemiddel">
+					<sequence>
+						<element name="Id" type="string"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<complexType name="typeLegemiddel">
+		<sequence>
+			<element name="Atc" type="export:CV" minOccurs="0"/>
+			<element name="NavnFormStyrke" type="string"/>
+			<element name="Reseptgruppe" type="export:CS"/>
+			<element name="LegemiddelformKort" type="export:CV" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<element name="LokalVare">
+		<complexType>
+			<sequence>
+				<element name="Navn" type="string"/>
+				<element name="Form" type="export:CV"/>
+				<element name="Forskrivningsenhet" type="export:CV"/>
+				<element ref="export:ATC" minOccurs="0"/>
+				<element name="Produsent" type="string"/>
+				<element name="Reseptgruppe" type="export:CS"/>
+				<element name="Virkestoff" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element ref="export:Virkestoff"/>
+							<element ref="export:Styrke"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Indikasjon" type="string" minOccurs="0"/>
+				<element name="Bruksomrade" type="string" minOccurs="0"/>
+				<element name="ForenkletDoseringsveildening" type="string" minOccurs="0"/>
+				<element name="SistOppdatert" type="dateTime"/>
+				<element name="PreparatType" type="export:CS"/>
+				<element name="Aktiv" type="boolean"/>
+				<choice minOccurs="0">
+					<element name="BrukerId" type="string"/>
+					<element name="InstitusjonsId" type="string"/>
+				</choice>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="ReseptDokLegemiddel">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeReseptDok">
+					<sequence>
+						<element name="KomLegemdlAdm" type="string" minOccurs="0"/>
+						<element name="RefKode" type="export:CV" minOccurs="0"/>
+						<element name="Reiterasjon" type="int" default="0"/>
+						<element name="BytteresRekvirent" type="export:CS" minOccurs="0"/>
+						<element name="Mengde" type="export:PQ" minOccurs="0"/>
+						<element ref="export:LegemiddelUtenMt" minOccurs="0"/>
+						<element ref="export:Forskrivning"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="ReseptDokHandelsvare">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeReseptDok">
+					<sequence>
+						<element name="Bruksveiledning" type="string" minOccurs="0"/>
+						<element name="ProdGruppe" type="export:CV" minOccurs="0"/>
+						<choice minOccurs="0">
+							<element ref="export:Brystprotese"/>
+							<element ref="export:Naringsmiddel"/>
+							<element ref="export:MedForbMatr"/>
+						</choice>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="InstituertAv">
+		<complexType>
+			<sequence>
+				<element ref="export:Organisasjon" minOccurs="0"/>
+				<element ref="export:Helseperson" minOccurs="0"/>
+				<element name="Freetekst" type="string" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Utlending">
+		<complexType>
+			<sequence>
+				<element name="ArbeidstakerNorge" type="boolean" minOccurs="0"/>
+				<element name="Konvensjonsland" type="export:CS" minOccurs="0"/>
+				<element ref="export:EEA" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="EkspAnm">
+		<complexType>
+			<sequence>
+				<element name="Vilkar" type="boolean"/>
+				<element name="MetodeEkspedering" type="export:CS"/>
+				<element name="Utleverer" type="string"/>
+				<element name="Kontaktperson" type="string"/>
+				<element name="Adresse" type="export:Address" minOccurs="0"/>
+				<element name="Merknad" type="string" minOccurs="0"/>
+				<element name="OrgNrUtleverer" type="string"/>
+				<element name="UtlevererNavn" type="string"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="LegemiddelUtenMt">
+		<complexType>
+			<sequence>
+				<element name="Begrunnelse" type="string"/>
+				<element name="Produsent" type="string"/>
+				<element name="DirektesoknadSlv" type="boolean"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Forskrivning">
+		<complexType>
+			<sequence>
+				<element name="Bruksomrade" type="string" minOccurs="0"/>
+				<element name="DosVeiledEnkel" type="string"/>
+				<element name="IngenKombinasjon" type="boolean" minOccurs="0"/>
+				<element name="Bruk" type="export:CS" minOccurs="0"/>
+				<element name="Kortdose" type="export:CV" minOccurs="0"/>
+				<element ref="export:AdministreringForskrivning" minOccurs="0"/>
+				<element ref="export:Dosering" minOccurs="0" maxOccurs="unbounded"/>
+				<choice>
+					<element ref="export:LegemiddelMerkevare"/>
+					<element ref="export:Legemiddelpakning"/>
+					<element ref="export:LegemiddelVirkestoff"/>
+					<element ref="export:Legemiddelblanding"/>
+				</choice>
+				<element name="Forholdsregelvedinntak" minOccurs="0">
+					<complexType>
+						<choice>
+							<element name="Tekst" type="string"/>
+							<element name="Kodet" type="export:CV"/>
+						</choice>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="AdministreringForskrivning">
+		<complexType>
+			<sequence>
+				<element name="AdmVed" type="export:CS"/>
+				<element name="AdmMate" type="export:CS"/>
+				<element name="AdmEtterSkjema" type="boolean" minOccurs="0"/>
+				<element name="AdmSkjema" type="string" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<!--Dosering-->
+	<element name="Dosering">
+		<complexType>
+			<sequence>
+				<element name="Starttidspunkt" type="export:TS" minOccurs="0"/>
+				<element name="Sluttidspunkt" type="export:TS" minOccurs="0"/>
+				<element ref="export:Doseringsregel" minOccurs="0"/>
+				<choice>
+					<element ref="export:DoseFastTidspunkt" maxOccurs="unbounded"/>
+					<element ref="export:DoseEtterBehov" maxOccurs="unbounded"/>
+				</choice>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Doseringsregel">
+		<complexType>
+			<sequence>
+				<element name="DoseresEtter" type="export:CS"/>
+				<element name="Merknad" type="string" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="typeDose">
+		<sequence>
+			<element name="Mengde" type="export:PQ"/>
+			<element name="Intervall" type="export:PQ" minOccurs="0"/>
+			<element ref="export:Infusjonshastighet" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<element name="Infusjonshastighet">
+		<complexType>
+			<sequence>
+				<element name="Volum" type="export:PQ"/>
+				<element name="Tidsenhet" type="export:CS"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="DoseFastTidspunkt">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeDose">
+					<sequence>
+						<element name="Klokkeslett" type="time" minOccurs="0"/>
+						<element name="Tidsomrade" type="export:CS" minOccurs="0"/>
+						<element name="GisEksakt" type="boolean"/>
+						<element ref="export:FastDose" minOccurs="0"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="DoseEtterBehov">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeDose">
+					<sequence>
+						<element name="DoseDognMaks" type="export:PQ"/>
+						<element name="DoseTidsromMaks" type="export:PQ"/>
+						<element name="Tidsrom" type="export:PQ"/>
+						<element name="DoseIntervallMin" type="export:PQ"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="FastDose">
+		<complexType>
+			<sequence>
+				<element name="FasteUkedager" type="export:CS" minOccurs="0" maxOccurs="unbounded"/>
+				<element name="DagerPa" type="int" minOccurs="0"/>
+				<element name="DagerAv" type="int" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="typeReseptDok">
+		<sequence>
+			<element name="Varegruppekode" type="export:CS"/>
+			<element name="Antall" type="decimal" minOccurs="0"/>
+			<element name="Merknad" type="string" minOccurs="0"/>
+			<element name="RefHjemmel" type="export:CV" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<element name="Seponering">
+		<complexType>
+			<sequence>
+				<element name="Tidspunkt" type="dateTime">
+					<annotation>
+						<documentation>Tidspunkt for seponering av vare. Pasienten skal ikke innta medisin fra og med dette tidspunktet. </documentation>
+					</annotation>
+				</element>
+				<element name="Arsak" type="export:CS">
+					<annotation>
+						<documentation>Kodeverk som angir årsaken til seponering.</documentation>
+					</annotation>
+				</element>
+				<element name="Merknad" type="string" minOccurs="0">
+					<annotation>
+						<documentation>Tilleggsinformasjon knyttet til seponeringen av varen. </documentation>
+					</annotation>
+				</element>
+        <element name="BrukerId" minOccurs="0" type="string"/>
+        <element name="Navn" type="string"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Brystprotese" type="export:typeVare"/>
+	<complexType name="typeVare">
+		<sequence>
+			<element name="Nr" type="string"/>
+			<element name="Navn" type="string"/>
+			<element ref="export:ProduktInfoVare" minOccurs="0"/>
+			<element ref="export:Leverandor" minOccurs="0"/>
+			<element ref="export:PrisVare" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="export:Refusjon" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<element name="ProduktInfoVare">
+		<complexType>
+			<sequence>
+				<element name="ProduktNr" type="string"/>
+				<element name="Volum" type="string" minOccurs="0"/>
+				<element name="EnhetStorrelse" type="export:CV"/>
+				<element name="AntPerPakning" type="int"/>
+				<element name="RefVilkar" type="string" minOccurs="0" maxOccurs="unbounded">
+					<annotation>
+						<documentation>Referanse til vilkår</documentation>
+					</annotation>
+				</element>
+				<element name="TillattMerMakspris" type="boolean"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Leverandor">
+		<complexType>
+			<sequence>
+				<element name="Navn" type="string"/>
+				<element name="Adresse" type="string"/>
+				<element name="Telefon" type="string"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="PrisVare">
+		<complexType>
+			<sequence>
+				<element name="Type" type="export:CV"/>
+				<element name="Pris" type="export:MO"/>
+				<element name="GyldigFraDato" type="date" minOccurs="0"/>
+				<element name="GyldigTilDato" type="date" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Refusjon">
+		<complexType>
+			<sequence>
+				<element name="RefRefusjonsgruppe" type="string" maxOccurs="unbounded">
+					<annotation>
+						<documentation>Referanse til refusjonsgruppe</documentation>
+					</annotation>
+				</element>
+				<element name="GyldigFraDato" type="date"/>
+				<element name="ForskrivesTilDato" type="date" minOccurs="0"/>
+				<element name="UtleveresTilDato" type="date" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Naringsmiddel">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeVare">
+					<sequence>
+						<element ref="export:StyrkeFormStoff" minOccurs="0"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<element name="StyrkeFormStoff">
+		<complexType>
+			<sequence>
+				<element name="Styrke" type="string" minOccurs="0"/>
+				<element name="Form" type="string" minOccurs="0"/>
+				<element name="Stoff" type="string" minOccurs="0" maxOccurs="unbounded"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="MedForbMatr">
+		<complexType>
+			<complexContent>
+				<extension base="export:typeVare">
+					<sequence>
+						<element ref="export:BestanddelMatr" minOccurs="0" maxOccurs="unbounded"/>
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	<complexType name="MO">
+		<attribute name="V" type="decimal" use="optional"/>
+		<attribute name="U" type="token" use="optional"/>
+	</complexType>
+	<element name="EEA">
+		<complexType>
+			<sequence>
+				<element name="EEADok" type="export:CS"/>
+				<element name="EEACardId" type="string" minOccurs="0"/>
+				<element name="EEAId" type="string" minOccurs="0"/>
+				<element name="EEATrygdekontorNavn" type="string" minOccurs="0"/>
+				<element name="EEATrygdekontorNr" type="string" minOccurs="0"/>
+				<element name="EEAGyldighetFra" type="date" minOccurs="0"/>
+				<element name="EEAGyldighet" type="date" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="BestanddelMatr">
+		<complexType>
+			<sequence>
+				<element name="Navn" type="string"/>
+				<element name="Materiale" type="string"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Organisasjon">
+		<complexType>
+			<sequence>
+				<element name="HerId" type="export:Ident"/>
+				<element name="Inst" type="string" minOccurs="0"/>
+				<element name="Dept" type="string" minOccurs="0"/>
+				<element name="InstitusjonsID" type="export:CV" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Helseperson">
+		<complexType>
+			<sequence>
+				<element name="HprId" type="export:Ident"/>
+				<element name="Fornavn" type="string" minOccurs="0"/>
+				<element name="Etternavn" type="string" minOccurs="0"/>
+				<element name="Spesialitet" type="export:CV" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="Prescription">
+		<complexType>
+			<sequence>
+				<element name="PrescriptionId" type="string"/>
+        <element name="HeadOfHistory" type="boolean">
+          <annotation>
+            <documentation>True when the prescription is head of treatment</documentation>
+          </annotation>
+        </element>
+        <element name="Aktiv" type="boolean">
+          <annotation>
+            <documentation>True when the version is active</documentation>
+          </annotation>
+        </element>
+        <element name="RefForrigePrescription" type="string" minOccurs="0"/>
+        <element name="PrescriptionVersionId" type="string" minOccurs="0"/>
+        <element name="RefForrigePrescriptionVersion" type="string" minOccurs="0"/>
+        <element name="ForskrivningsInfoId" type="string">
+          <annotation>
+            <documentation>Legemiddelbehandling/PrescriptionDetails/ForskrivningsInfo[]/Id</documentation>
+          </annotation>
+        </element>
+        <element name="Tidspunkt" type="dateTime"/>
+				<element name="ReseptId" type="string" minOccurs="0"/>
+				<element ref="export:InstituertAv" minOccurs="0"/>
+        <element name="RfSendStatus" type="string" minOccurs="0">
+          <annotation>
+            <documentation>M1Pending or M1Failed or M5Pending or M5Failed</documentation>
+          </annotation>
+        </element>
+				<element name="RFSendFeilmelding" type="string" minOccurs="0"/>
+				<element name="Tilbakekalling" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Merknad" type="string" minOccurs="0"/>
+							<element name="Arsak" type="export:CV"/>
+							<element name="Tidspunkt" type="dateTime"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Slettet" minOccurs="0">
+					<complexType>
+						<sequence>
+							<element name="Tidspunkt" type="dateTime"/>
+							<element name="BrukerId" type="string"/>
+							<element name="Arsak" type="export:CV">
+								<annotation>
+									<documentation>Coded delete reason (from kodeverk 9237)</documentation>
+								</annotation>
+							</element>
+							<element name="Merknad" type="string"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Fjernet" minOccurs="0">
+					<annotation>
+						<documentation>Discarded prescriptions and removed by "empty LIB" operation</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+              <element name="Navn" type="string"/>
+							<element name="Tidspunkt" type="dateTime"/>
+							<element name="BrukerId" type="string"/>
+							<element name="Merknad" type="string"/>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="RfStatus" type="string" minOccurs="0">
+					<annotation>
+						<documentation>from kodeverk 7408, plus "e-resept not in RF"</documentation>
+					</annotation>
+				</element>
+        <element name="ItemSource" type="string" >
+          <annotation>
+            <documentation>
+              Rf - From RF (Prescriptions being received from both RF and Kj should be shown as "RF")
+              Kj - From Kjernejournal
+              Epj - From Epj
+              Utl - From delivery as a part of a M8 message
+              Utl/KJ - From delivery as a part fo an M8.1 message (Kjernejournal)
+              P/Utl - From delivery constructed from the information in an M8 notifying of a delivery made in response to a paper resept
+              P/Utl/K - From delivery constructed from an M8.1 containing a paper prescription
+              M25/Rf - From an M25 coming in via M9.12
+              M25/Kj- From an M25 received from Kj
+              M25 - From an async M25
+              Ukjent - The external source of the prescription information cannot be determined
+            </documentation>
+          </annotation>
+        </element>
+				<element name="LokalKjent" type="boolean">
+					<annotation>
+						<documentation>starts as 0 if received from extern source, changes to 1 when imported (not same as PrescriptionVersions.InVib)</documentation>
+					</annotation>
+				</element>
+        <element name="InVib" type="boolean" />
+				<element name="Kladd" type="string" minOccurs="0">
+					<annotation>
+						<documentation>New prescription
+Renewal
+Import
+Stop
+Recall</documentation>
+					</annotation>
+				</element>
+				<element name="Brukere" minOccurs="0" maxOccurs="1">
+					<complexType>
+						<sequence>
+							<element name="Bruker" minOccurs="1" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="BrukerId" minOccurs="0" type="string"/>
+                    <element name="Hpr" minOccurs="0" type="string"/>
+                    <element name="Navn" minOccurs="0" type="string"/>
+                    <element name="TypeOppdatering" type="string">
+                      <annotation>
+                        <documentation>
+                          Requested by
+                          Registered by
+                          Approved by
+                          Forskriver
+                          Created By
+                          LastedEdited By
+                          Signed by
+                        </documentation>
+                      </annotation>
+                    </element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+        <element ref="export:Seponering" minOccurs="0"/>
+      </sequence>
+		</complexType>
+	</element>
+  <element name="Utlevering">
+    <complexType>
+      <sequence>
+        <element name="PrescriptionId" type="string"/>
+        <element name="MsgId" type="string"/>
+        <element name="MottattTidspunkt" type="dateTime"/>
+      </sequence>
+    </complexType>
+  </element>
+  <element name="SlvSvar">
+    <complexType>
+      <sequence>
+        <element name="PrescriptionId" type="string"/>
+        <element name="MsgId" type="string"/>
+        <element name="MottattTidspunkt" type="dateTime"/>
+      </sequence>
+    </complexType>
+  </element>
+</schema>
