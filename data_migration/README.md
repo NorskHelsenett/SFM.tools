@@ -3,6 +3,8 @@ Tools in this folder support the migration of data into SFM.
 
 ```SFM.DataImporter.Client.zip``` contains the uploader that parses the predefined enctypted data for an installation, including organizations, personell, patients and patient data.
 
+```PrivatSky.SFM.DataImporter.Client.zip``` contains the uploader that parses the predefined encrypted data for an installation, including organizations, personell, patients and patient data. This is compatible with Privat Sky environments(e.g. test6). This version requires .Net8.
+
 `FmSfmExportImportFormatDefinition.xsd` contains the formal XML specification for the format used in the different file components.
 
 `export-crypto.cs` contains example code for content encryption of data for import to SFM.
