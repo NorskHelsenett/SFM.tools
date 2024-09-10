@@ -1,0 +1,2 @@
+A number of 3rd party components in Dr. Who has been updated.
+Support for the REST API Blokkere helsepersonell has been added. 
