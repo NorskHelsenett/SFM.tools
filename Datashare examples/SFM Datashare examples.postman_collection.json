@@ -1,0 +1,527 @@
+{
+	"info": {
+		"_postman_id": "ab18bccd-fcda-4ebb-b694-ca3841f9368b",
+		"name": "SFM Datashare examples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32225610"
+	},
+	"item": [
+		{
+			"name": "SessionCreate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"var code = jsonData.code;\r",
+							"\r",
+							" \r",
+							"pm.test(\"Set code\", pm.globals.set(\"sessionCode\", code)  ); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nonce\" : \"sqGnrWdjgWN2COtLrXMYu9+xER5P9r4+UbepqyQh0gJThofaSXan2djVtnMGuLVHgrx+mOFdeCrtbQykEwR2rw==\"\r\n}"
+				},
+				"url": {
+					"raw": "https://session.test2.forskrivning.no/api/Session/create",
+					"protocol": "https",
+					"host": [
+						"session",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"api",
+						"Session",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SessionRefresh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"var code = jsonData.code;\r",
+							"\r",
+							" \r",
+							"pm.test(\"Set code\", pm.globals.set(\"sessionCode\", code)  ); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nonce\" : \"sqGnrWdjgWN2COtLrXMYu9+xER5P9r4+UbepqyQh0gJThofaSXan2djVtnMGuLVHgrx+mOFdeCrtbQykEwR2rw==\"\r\n}"
+				},
+				"url": {
+					"raw": "https://session.test2.forskrivning.no/api/Session/create",
+					"protocol": "https",
+					"host": [
+						"session",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"api",
+						"Session",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTicket Raymond",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"var ticket = jsonData.patientTicket;\r",
+							"\r",
+							" \r",
+							"pm.test(\"Set ticket\", pm.globals.set(\"ticket\", ticket)  ); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"patientPid\" : \"10086148248\"\r\n}"
+				},
+				"url": {
+					"raw": "https://session.test2.forskrivning.no/api/PatientTicket",
+					"protocol": "https",
+					"host": [
+						"session",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"api",
+						"PatientTicket"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patient",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/Patient",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"Patient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patient-FhirId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/Patient",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"Patient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Organization",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/Organization",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"Organization"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Organization",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/Organization",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"Organization"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Practitioner",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/Practitioner?",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"Practitioner"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lib-list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/List?patientTicket=b8edb3c0-ea02-4ac5-a1c7-20a273c475f0&summary=false",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"List"
+					],
+					"query": [
+						{
+							"key": "patientTicket",
+							"value": "b8edb3c0-ea02-4ac5-a1c7-20a273c475f0"
+						},
+						{
+							"key": "summary",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lib-list administration",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://datashare.test2.forskrivning.no/List/?patientTicket=b8edb3c0-ea02-4ac5-a1c7-20a273c475f0&_query=administration&from=2022-11-20T00:00:00&to=2022-11-24T23:59:59&_summary=false",
+					"protocol": "https",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"List",
+						""
+					],
+					"query": [
+						{
+							"key": "patientTicket",
+							"value": "b8edb3c0-ea02-4ac5-a1c7-20a273c475f0"
+						},
+						{
+							"key": "_query",
+							"value": "administration"
+						},
+						{
+							"key": "from",
+							"value": "2022-11-20T00:00:00"
+						},
+						{
+							"key": "to",
+							"value": "2022-11-24T23:59:59"
+						},
+						{
+							"key": "_summary",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AllergyIntolerance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/List?patientTicket=b8edb3c0-ea02-4ac5-a1c7-20a273c475f0&summary=false",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"List"
+					],
+					"query": [
+						{
+							"key": "patientTicket",
+							"value": "b8edb3c0-ea02-4ac5-a1c7-20a273c475f0"
+						},
+						{
+							"key": "summary",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Observation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/Patient",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"Patient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Person",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Metadata",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/metadata",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"metadata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "drugReview",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Medication",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://datashare.test2.forskrivning.no/Medication?_id=ID_678BABCA-F241-431A-8EF3-698FFDB39705",
+					"protocol": "http",
+					"host": [
+						"datashare",
+						"test2",
+						"forskrivning",
+						"no"
+					],
+					"path": [
+						"Medication"
+					],
+					"query": [
+						{
+							"key": "_id",
+							"value": "ID_678BABCA-F241-431A-8EF3-698FFDB39705"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Reset PIN",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MedicationStatement",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijc4NjY3RjkwREMxMUJGMDRCRDk0NjdEMUY5MTIwQzRBNDM0MEI0Q0YiLCJ4NXQiOiJlR1pfa053UnZ3UzlsR2ZSLVJJTVNrTkF0TTgiLCJ0eXAiOiJhdCtqd3QifQ.eyJpc3MiOiJodHRwczovL2hlbHNlaWQtc3RzLnRlc3QubmhuLm5vIiwibmJmIjoxNzMwMTE2MDcwLCJpYXQiOjE3MzAxMTYwNzAsImV4cCI6MTczMDExOTY3MCwiYXVkIjoiZS1oZWxzZTpzZm0uYXBpIiwic2NvcGUiOlsib3BlbmlkIiwiaGVsc2VpZDovL3Njb3Blcy9pZGVudGl0eS9waWQiLCJoZWxzZWlkOi8vc2NvcGVzL2lkZW50aXR5L3NlY3VyaXR5X2xldmVsIiwiaGVsc2VpZDovL3Njb3Blcy9ocHIvaHByX251bWJlciIsImhlbHNlaWQ6Ly9zY29wZXMvaWRlbnRpdHkvYXNzdXJhbmNlX2xldmVsIiwiZS1oZWxzZTpzZm0uYXBpL3NmbS5hcGkiXSwiYW1yIjpbInB3ZCJdLCJjbGllbnRfaWQiOiJmYzJmMTc0Yy0zOTJkLTQzYzQtYWE1Yi0yMDIwMzk1ZDRiMmYiLCJoZWxzZWlkOi8vY2xhaW1zL2NsaWVudC9rai9vcmduciI6IjEwMDEwMDYxNCIsImNsaWVudF9hbXIiOiJwcml2YXRlX2tleV9qd3QiLCJoZWxzZWlkOi8vY2xhaW1zL2NsaWVudC9jbGFpbXMvb3JnbnJfcGFyZW50IjoiMTAwMTAwNjE0Iiwic3ViIjoiNWs3RjhUTXdkdmNCZlZKTHdRRjB3a3p4M3Jxb2xxUUFvYmhHc0puNnpUQT0iLCJhdXRoX3RpbWUiOjE3MzAxMTYwNzAsImlkcCI6InRlc3RpZHAtb2lkYyIsImhlbHNlaWQ6Ly9jbGFpbXMvaWRlbnRpdHkvcGlkIjoiMDgxMjgzMTU5NzgiLCJoZWxzZWlkOi8vY2xhaW1zL2lkZW50aXR5L3NlY3VyaXR5X2xldmVsIjoiNCIsImhlbHNlaWQ6Ly9jbGFpbXMvaWRlbnRpdHkvYXNzdXJhbmNlX2xldmVsIjoiaGlnaCIsImhlbHNlaWQ6Ly9jbGFpbXMvaHByL2hwcl9udW1iZXIiOiIxMDEwMDM4IiwiZS1oZWxzZTpzZm0uYXBpL2NsaWVudC9jbGFpbXMvc2ZtLWlkIjoiZmMyZjE3NGMtMzkyZC00M2M0LWFhNWItMjAyMDM5NWQ0YjJmIiwiaGVsc2VpZDovL2NsYWltcy9jbGllbnQvY2xpZW50X3RlbmFuY3kiOiJzaW5nbGUtdGVuYW50Iiwic2lkIjoiRjhEREVEQjE0Rjc3OEI3QTNEQzZCNzI2REU0Q0UxOTIifQ.TGTckYIyIbb2Eyf46SrVA4vkkvNBmjV9jW9vhtB0vVrjzWotqv6gLYkcLr2rUSEELDGWaF9iroPOXNpPv9iv5SBtdJYI3AxnbXb1xRSNOHM83yPC_KBQHm7JOSgkoE_xGI-0HPRdBlLPppif7UpuEAaol3U_QM25DphHX-ov14r38ETCBdY7nRmv9E3JJ0IQK4HVBTEPKdmTdtvB_2ae16VyTNMA1JATt3GM_HPWadCtvrT7UYoBBTXpIU9SaRZhTZ-iu2m6VuZuPXMrZVHl5cjyA5rahMPBTMsY3rerXQCAK1WI3QSbNLg0aV4K4P8LlAFN5VWXvplk6D5a6uqA3LynY4IVVtPJ_b7fCveOvzd2cIorwmjr1eJ4etyc-f4Ebkk1Q2zBmtOvjyzfnkDTEClzfj8wKs3TKDZ6xvaCXj_giQGJHZ6aByc5N7DAChC5opP4DWxvtJlj7kvMjsIU6ulIGbLLqdGsBVCC5duLzyLGGej27347-ZyYWMZo10u3",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
