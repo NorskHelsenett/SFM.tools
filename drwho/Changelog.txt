@@ -1,0 +1,6 @@
+Version4.2.0.0
+A number of 3rd party components in Dr. Who has been updated.
+Support for the REST API Blokkere helsepersonell has been added. 
+
+Version4.2.7.0
+Added birthday fields for Helsenorge
