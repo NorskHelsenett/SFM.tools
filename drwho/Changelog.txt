@@ -4,3 +4,7 @@ Support for the REST API Blokkere helsepersonell has been added.
 
 Version4.2.7.0
 Added birthday fields for Helsenorge
+
+Version 4.2.9.0
+04.04.2025
+Fix for HelseID change of claims due to vulnerabilities in OpenID Connect
