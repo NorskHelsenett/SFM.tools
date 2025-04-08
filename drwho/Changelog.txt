@@ -8,3 +8,7 @@ Added birthday fields for Helsenorge
 Version 4.2.9.0
 04.04.2025
 Fix for HelseID change of claims due to vulnerabilities in OpenID Connect
+
+Version 4.2.9.1
+08.04.2025
+Bugfix for HelseID change of claims due to vulnerabilities in OpenID Connect
