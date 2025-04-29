@@ -16,3 +16,7 @@ Bugfix for HelseID change of claims due to vulnerabilities in OpenID Connect
 Version 4.3.0.0
 23.04.2025
 Bugfix for HelseID Multi tennant token after HeseID upgrade
+
+Version 4.3.2.0
+29.04.2025
+All Sha1 references removed
