@@ -20,3 +20,7 @@ Bugfix for HelseID Multi tennant token after HeseID upgrade
 Version 4.3.2.0
 29.04.2025
 All Sha1 references removed
+
+Version 4.3.3.0
+06.05.2025
+Buggy soft cert signing fixed
