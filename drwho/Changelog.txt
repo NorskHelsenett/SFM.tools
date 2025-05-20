@@ -24,3 +24,8 @@ All Sha1 references removed
 Version 4.3.3.0
 06.05.2025
 Buggy soft cert signing fixed
+
+Version 4.3.4.0
+20.05.2025
+Remembering used pin code in Dr. Who mainform
+and using pin from autotests fixed
