@@ -29,3 +29,8 @@ Version 4.3.4.0
 20.05.2025
 Remembering used pin code in Dr. Who mainform
 and using pin from autotests fixed
+
+4.3.4.9
+Added warning for expiring certificates. 
+Claim change from JWT to at+jwt for SFM
+PAR implemented for SFM
