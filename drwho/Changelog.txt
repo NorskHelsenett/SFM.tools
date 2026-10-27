@@ -34,3 +34,44 @@ and using pin from autotests fixed
 Added warning for expiring certificates. 
 Claim change from JWT to at+jwt for SFM
 PAR implemented for SFM
+
+4.3.4.5
+Test versjon
+
+4.3.4.6
+PAR implementert for Heseid pålogging
+
+4.3.4.7
+Ikke bruk
+
+4.3.4.8
+Testversjon
+
+4.3.4.9
+PAR bugfix og scope rettet.
+
+4.3.5.0
+Endret format for pasientfiler for kombitesting.
+Første linje med feltnavn blir ikke lenger med i listen ved innlesing.
+formatet:
+Nin;Name;Gender;BirthDate;YearOfBirth
+Navn blir tatt med i innsendingen
+
+4.3.5.1
+Samme endring som 4.3.5.0 for bruk av fordelingsfil.
+
+4.3.5.2
+Refresh token lagt til for SFM.Auto testing. Nytt orgnummer lagt til for RF
+
+4.3.5.3
+Bug i TokenForm ved lagring med bare "PID for prescriber" utfylt, fikset
+
+4.3.5.4
+Lagt til henting av refresh tokens i Basis, Auto Testing og Datashare 
+
+4.3.5.5
+Opppdatert namespaces
+
+4.3.5.6
+27.10.2026
+Datoformat for tilgangsbegrensning fixet
